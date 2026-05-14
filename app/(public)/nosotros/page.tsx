@@ -5,7 +5,7 @@ import { FadeIn } from "@/components/marketing/fade-in";
 import { SectionHeader } from "@/components/marketing/section-header";
 import { OptimizedImage } from "@/components/media/optimized-image";
 import { Button } from "@/components/ui/button";
-import { SITE, WHATSAPP_CHAT_URL } from "@/lib/constants";
+import { SITE, SITE_IMAGES, WHATSAPP_CHAT_URL } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Nosotros",
@@ -22,17 +22,17 @@ const milestones = [
   {
     year: "Raíces",
     title: "Una mesa larga en Av. San Martín",
-    body: "Casa Testa nació como un gesto doméstico que se fue agrandando: primero fueron las ollas que arreglábamos para vecinos, después las pizzellas que salían a la merienda, después el deseo de curar piezas con nombre propio.",
+    body: "Casa Testa empezó como un gesto doméstico que fue creciendo: primero las ollas que curábamos para vecinos, después las pizzellas que salían a la merienda, después el deseo de elegir piezas con nombre propio y contar por qué estaban ahí.",
   },
   {
     year: "Oficio",
-    title: "Manos que entienden el metal",
-    body: "Aprendimos a escuchar el hierro: dónde se cansó la soldadura, dónde pide paciencia el esmalte. Cada reparación es una conversación con el tiempo, no una carrera contra el reloj.",
+    title: "Manos que escuchan el metal",
+    body: "Aprendimos a leer el hierro: dónde se cansó la soldadura, dónde el esmalte pide aire, dónde conviene parar. Cada reparación es una conversación con el tiempo, no una carrera contra el reloj ni un parche escondido.",
   },
   {
     year: "Hoy",
-    title: "Un salón cálido, con olor a café",
-    body: "Te recibimos para mostrarte moldes, vajilla y piezas seleccionadas. No vendemos ruido: preferimos contarte de dónde viene cada cosa y cómo se cuida para que dure años.",
+    title: "Un salón que huele a café y masa",
+    body: "Te recibimos para mirar moldes, vajilla y piezas seleccionadas. No vendemos ruido: preferimos contarte de dónde viene cada objeto, cómo se cuida y qué esperar del fuego de tu cocina.",
   },
 ];
 
@@ -42,8 +42,8 @@ export default function NosotrosPage() {
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
           <OptimizedImage
-            src="https://images.unsplash.com/photo-1498579687545-d5a4fffb0ac9?auto=format&fit=crop&w=2000&q=80"
-            alt="Mesa familiar con comida casera y luz cálida"
+            src={SITE_IMAGES.pages.nosotrosHero}
+            alt={SITE_IMAGES.pages.nosotrosHeroAlt}
             fill
             priority
             className="object-cover"
@@ -58,12 +58,14 @@ export default function NosotrosPage() {
               Historia
             </p>
             <h1 className="mt-3 font-heading text-4xl font-semibold leading-tight tracking-tight text-balance text-foreground sm:text-5xl">
-              Casa Testa es cocina, hogar y oficio con acento italiano
+              Casa Testa: cocina italiana con manos de barrio y mirada de
+              salón
             </h1>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Somos un equipo pequeño que cree en la mesa como lugar de cuidado.
-              Seleccionamos piezas con carácter, reparamos lo que merece seguir y
-              celebramos la pizzella como ritual compartido.
+              Somos un equipo chico que cree en la mesa como lugar de cuidado.
+              Seleccionamos piezas con carácter, restauramos lo que merece
+              seguir y celebramos la pizzella como ritual compartido — con el
+              respeto de quien entiende el oficio.
             </p>
             <Button
               nativeButton={false}
@@ -82,7 +84,7 @@ export default function NosotrosPage() {
           <SectionHeader
             eyebrow="Filosofía"
             title="La calidad se nota en el silencio de los detalles"
-            description="No competimos con el ruido del descartable. Preferimos piezas que envejecen bien, texturas que invitan a tocar y procesos que se explican sin prisa."
+            description="No competimos con el ruido del descartable. Apostamos a piezas que envejecen con dignidad, texturas que invitan a tocar y procesos que se explican sin prisa, con la calidez de quien recibe en casa."
           />
           <ul className="space-y-3 text-sm leading-relaxed text-muted-foreground">
             <li>· Atención personalizada, sin scripts de call center.</li>
@@ -93,8 +95,8 @@ export default function NosotrosPage() {
         <FadeIn>
           <div className="relative aspect-[5/6] overflow-hidden rounded-[2rem] border border-border/70 shadow-xl">
             <OptimizedImage
-              src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1400&q=80"
-              alt="Mesa con pan, quesos y frutas"
+              src={SITE_IMAGES.pages.nosotrosMesa}
+              alt={SITE_IMAGES.pages.nosotrosMesaAlt}
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
@@ -107,8 +109,8 @@ export default function NosotrosPage() {
           <FadeIn>
             <SectionHeader
               eyebrow="Tiempo"
-              title="Tres capítulos de nuestra historia"
-              description="Un relato breve para que sientas el tono de Casa Testa antes de cruzar el umbral del salón."
+              title="Tres capítulos, una misma mesa larga"
+              description="Un relato breve para que sientas el tono de Casa Testa antes de cruzar el umbral: raíces en el barrio, oficio en las manos y un presente que huele a café recién hecho."
               align="center"
             />
           </FadeIn>

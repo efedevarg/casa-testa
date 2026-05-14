@@ -4,9 +4,9 @@
  */
 export const SITE = {
   name: "Casa Testa",
-  tagline: "Artesanía italiana con alma cálida",
+  tagline: "Selección italiana para cocinas que valoran el gesto lento",
   description:
-    "Casa Testa — productos artesanales, pizzellas y reparaciones con estética italiana y calidad premium.",
+    "Casa Testa — curaduría de ollas, sartenes, vajilla y pizzellas con estética mediterránea; taller de reparaciones con criterio artesanal en Caseros.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   address: {
     line: "Av. San Martín 1465, Caseros",

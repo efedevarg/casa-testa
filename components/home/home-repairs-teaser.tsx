@@ -1,9 +1,13 @@
+"use client";
+
 import Link from "next/link";
+import { m, useReducedMotion } from "framer-motion";
 
 import { FadeIn } from "@/components/marketing/fade-in";
 import { SectionHeader } from "@/components/marketing/section-header";
 import { OptimizedImage } from "@/components/media/optimized-image";
 import { Button } from "@/components/ui/button";
+import { SITE_IMAGES } from "@/lib/constants";
 
 const steps = [
   {
@@ -30,8 +34,8 @@ export function HomeRepairsTeaser() {
       <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/2 lg:block">
         <div className="relative h-full min-h-[420px]">
           <OptimizedImage
-            src="https://images.unsplash.com/photo-1584990340619-374305e7ade0?auto=format&fit=crop&w=1600&q=80"
-            alt="Detalle de utensilios de cocina metálicos"
+            src={SITE_IMAGES.home.repairsTeaser}
+            alt={SITE_IMAGES.home.repairsTeaserAlt}
             fill
             className="object-cover opacity-40"
             sizes="50vw"
@@ -44,8 +48,8 @@ export function HomeRepairsTeaser() {
         <FadeIn className="space-y-6">
           <SectionHeader
             eyebrow="Reparaciones"
-            title="Lo que se rompió merece una segunda oportunidad"
-            description="Trabajamos ollas, sartenes, moldes y piezas que ya forman parte de tu historia. No somos un taller exprés: somos un lugar donde el metal vuelve a confiar."
+            title="Lo que ya cocinó con vos merece una segunda vida"
+            description="Ollas, sartenes, moldes y piezas con historia: las miramos con calma, explicamos qué tiene sentido restaurar y devolvemos el oficio con procesos claros, sin promesas mágicas."
           />
           <Button
             nativeButton={false}
@@ -60,23 +64,51 @@ export function HomeRepairsTeaser() {
 
         <FadeIn className="grid gap-4 sm:grid-cols-2">
           {steps.map((step, index) => (
-            <div
-              key={step.title}
-              className="rounded-2xl border border-border/70 bg-card/90 p-5 shadow-sm backdrop-blur-sm"
-            >
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
-                Paso {index + 1}
-              </p>
-              <h3 className="mt-2 font-heading text-lg font-semibold tracking-tight text-foreground">
-                {step.title}
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                {step.body}
-              </p>
-            </div>
+            <RepairStepCard key={step.title} step={step} index={index} />
           ))}
         </FadeIn>
       </div>
     </section>
+  );
+}
+
+function RepairStepCard({
+  step,
+  index,
+}: {
+  step: { title: string; body: string };
+  index: number;
+}) {
+  const reduce = useReducedMotion();
+  const inner = (
+    <>
+      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+        Paso {index + 1}
+      </p>
+      <h3 className="mt-2 font-heading text-lg font-semibold tracking-tight text-foreground">
+        {step.title}
+      </h3>
+      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{step.body}</p>
+    </>
+  );
+
+  if (reduce) {
+    return (
+      <div className="rounded-2xl border border-border/70 bg-card/90 p-5 shadow-sm backdrop-blur-sm transition-shadow duration-300 hover:shadow-md">
+        {inner}
+      </div>
+    );
+  }
+
+  return (
+    <m.div
+      initial={{ opacity: 0, y: 14 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-8% 0px" }}
+      transition={{ duration: 0.45, delay: index * 0.05, ease: [0.22, 1, 0.36, 1] }}
+      className="rounded-2xl border border-border/70 bg-card/90 p-5 shadow-sm backdrop-blur-sm transition-shadow duration-300 hover:-translate-y-0.5 hover:shadow-md"
+    >
+      {inner}
+    </m.div>
   );
 }

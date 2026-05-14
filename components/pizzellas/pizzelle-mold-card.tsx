@@ -14,7 +14,7 @@ export function PizzelleMoldCard({
 }) {
   return (
     <FadeIn className={cn("h-full", className)}>
-      <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border/70 bg-card shadow-sm transition-transform duration-500 hover:-translate-y-1 hover:shadow-xl">
+      <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border/70 bg-card shadow-sm ring-0 transition-[transform,box-shadow,ring-color] duration-500 hover:-translate-y-1 hover:shadow-xl hover:ring-2 hover:ring-primary/15">
         <div className="relative aspect-[5/6] overflow-hidden bg-muted">
           <OptimizedImage
             src={mold.imageSrc}

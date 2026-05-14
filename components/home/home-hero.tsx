@@ -5,7 +5,7 @@ import { m, useReducedMotion } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
 import { OptimizedImage } from "@/components/media/optimized-image";
-import { WHATSAPP_CHAT_URL } from "@/lib/constants";
+import { SITE_IMAGES, WHATSAPP_CHAT_URL } from "@/lib/constants";
 
 export function HomeHero() {
   const reduce = useReducedMotion();
@@ -14,8 +14,8 @@ export function HomeHero() {
     <section className="relative isolate min-h-[88vh] overflow-hidden">
       <div className="absolute inset-0">
         <OptimizedImage
-          src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=2000&q=80"
-          alt="Cocina luminosa con ingredientes frescos sobre mesada"
+          src={SITE_IMAGES.hero.home}
+          alt={SITE_IMAGES.hero.homeAlt}
           fill
           priority
           className="scale-105 object-cover"
@@ -53,13 +53,12 @@ function HeroCopy() {
       </p>
       <div className="space-y-4">
         <h1 className="font-heading text-4xl font-semibold leading-[1.05] tracking-tight text-balance text-foreground sm:text-5xl lg:text-6xl">
-          El fuego lento de Italia, en tu mesa de todos los días.
+          Italia en la mesa, con la calma de quien sabe esperar.
         </h1>
         <p className="max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-          Seleccionamos piezas con alma de taller: ollas que abrazan el guiso,
-          vajilla que invita a quedarse, moldes para pizzellas que huelen a
-          domingo y reparaciones hechas con la paciencia de quien entiende el
-          metal.
+          Curamos ollas que retienen memoria de guiso, sartenes que sellan con
+          respeto, vajilla que invita a quedarse, moldes para pizzellas con olor
+          a domingo y un taller que escucha el metal antes de prometer.
         </p>
       </div>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">

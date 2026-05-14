@@ -7,6 +7,7 @@ import { FadeIn } from "@/components/marketing/fade-in";
 import { SectionHeader } from "@/components/marketing/section-header";
 import { OptimizedImage } from "@/components/media/optimized-image";
 import { Button } from "@/components/ui/button";
+import { SITE_IMAGES } from "@/lib/constants";
 
 export function HomePizzelleFeature() {
   const reduce = useReducedMotion();
@@ -17,7 +18,7 @@ export function HomePizzelleFeature() {
         <SectionHeader
           eyebrow="Pizzelle della Nonna"
           title="Un molde no calienta solo masa: calienta recuerdos"
-          description="Las pizzellas son crujido y abrazo, mesa de domingo y risas repetidas. Elegimos moldes con peso real, materiales nobles y acabados que entienden el fuego sin apurarse."
+          description="La pizzella es crujido, abrazo y mesa de domingo. Elegimos moldes con peso real, materiales nobles y acabados que entienden el fuego sin apurarse — como en la casa de la nonna, con el ritmo justo."
         />
         <ul className="space-y-3 text-sm leading-relaxed text-muted-foreground">
           <li>· Hierro, bronce y gres esmaltado seleccionados a mano.</li>
@@ -37,8 +38,8 @@ export function HomePizzelleFeature() {
       <FadeIn className="order-1 lg:order-2">
         <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-border/70 shadow-xl">
           <OptimizedImage
-            src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=1400&q=80"
-            alt="Pan artesanal dorado en ambiente cálido de panadería"
+            src={SITE_IMAGES.home.pizzelleFeature}
+            alt={SITE_IMAGES.home.pizzelleFeatureAlt}
             fill
             sizes="(max-width: 1024px) 100vw, 50vw"
             className="object-cover"

@@ -11,8 +11,8 @@ export function HomeCategoryGrid() {
       <FadeIn>
         <SectionHeader
           eyebrow="Curaduría"
-          title="Cinco mundos para recorrer con calma"
-          description="Cada categoría resume una forma de habitar la cocina: la cocción paciente, la mesa compartida, el gesto cotidiano, el detalle decorativo y el ritual de la pizzella."
+          title="Seis familias para habitar la cocina con intención"
+          description="Del hierro que abrasa con ternura al brillo del cobre en la mesa: cada categoría es un capítulo distinto del mismo hogar italiano, contado con manos argentinas."
         />
       </FadeIn>
 

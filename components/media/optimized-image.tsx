@@ -2,6 +2,10 @@ import Image from "next/image";
 
 import { cn } from "@/lib/utils";
 
+/** Placeholder blur tenue (crema) para transición suave en cards y héroes */
+const BLUR_DATA_URL =
+  "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAAIAAgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=";
+
 type OptimizedImageProps = {
   src: string;
   alt: string;
@@ -11,6 +15,8 @@ type OptimizedImageProps = {
   className?: string;
   sizes?: string;
   priority?: boolean;
+  /** Desactiva blur en LCP u héroes */
+  placeholder?: "blur" | "empty";
 };
 
 export function OptimizedImage({
@@ -22,7 +28,10 @@ export function OptimizedImage({
   className,
   sizes,
   priority,
+  placeholder = "blur",
 }: OptimizedImageProps) {
+  const useBlur = !priority && placeholder === "blur";
+
   return (
     <Image
       src={src}
@@ -33,6 +42,9 @@ export function OptimizedImage({
       className={cn("object-cover", className)}
       sizes={sizes ?? (fill ? "(max-width: 768px) 100vw, 50vw" : undefined)}
       priority={priority}
+      loading={priority ? "eager" : "lazy"}
+      placeholder={useBlur ? "blur" : "empty"}
+      blurDataURL={useBlur ? BLUR_DATA_URL : undefined}
     />
   );
 }

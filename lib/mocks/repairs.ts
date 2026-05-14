@@ -5,30 +5,30 @@ export const MOCK_REPAIR_SERVICES: MockRepairItem[] = [
     id: "r1",
     title: "Ollas y cacerolas",
     description:
-      "Soldaduras, mangos flojos, tapas deformadas y esmaltes dañados. Evaluamos el hierro y proponemos una solución digna de otra década en tu cocina.",
+      "Soldaduras fatigadas, mangos que bailan, tapas que ya no sellan y esmaltes lastimados. Evaluamos el hierro con lupa y propuesta clara: solo intervenimos si la pieza merece otra vida en tu cocina.",
   },
   {
     id: "r2",
     title: "Sartenes y planchas",
     description:
-      "Fondos combados, curado de hierro y revestimientos que piden calma. Restauramos la plancha para que vuelva a sellar sin prisa.",
+      "Fondos combados, curado de hierro a recuperar y superficies que perdieron la danza del calor. Restauramos la geometría para que vuelva a sellar con precisión, sin apuro de taller exprés.",
   },
   {
     id: "r3",
     title: "Moldes para pizzellas",
     description:
-      "Superficie despareja, grietas finas o bisagras cansadas. Tratamos cada molde como herramienta de familia, no como objeto descartable.",
+      "Bisagras cansadas, relieve desgastado o calor desparejo entre mitades. Tratamos cada molde como herencia: ajustamos, alineamos y devolvemos el ritual con dignidad.",
   },
   {
     id: "r4",
-    title: "Vajilla y piezas de gres",
+    title: "Vajilla y gres de mesa",
     description:
-      "Líneas de horneado, chips y microfisuras. A veces el arreglo es estético, a veces estructural: siempre te decimos la verdad con tacto.",
+      "Microfisuras, chips en el borde o líneas de cocción que cambiaron el carácter. Distinguimos lo estético de lo estructural y te contamos la verdad con tacto, antes de tocar nada.",
   },
   {
     id: "r5",
     title: "Cuchillería y afilado",
     description:
-      "Filos desdibujados, cabos descosidos. Recuperamos el equilibrio entre peso y corte para que el gesto vuelva a ser preciso.",
+      "Filos desdibujados, cabos descosidos o balance que ya no acompaña el gesto. Recuperamos el peso justo entre mango y hoja para que el corte vuelva a sentirse silencioso.",
   },
 ];

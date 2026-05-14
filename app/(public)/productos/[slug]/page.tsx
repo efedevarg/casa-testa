@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 
 import { Button } from "@/components/ui/button";
 import { OptimizedImage } from "@/components/media/optimized-image";
-import { WHATSAPP_CHAT_URL } from "@/lib/constants";
+import { SITE, WHATSAPP_CHAT_URL } from "@/lib/constants";
 import { formatArs } from "@/lib/format";
 import { MOCK_PRODUCTS, PRODUCT_CATEGORY_LABEL, getProductBySlug } from "@/lib/mocks";
 
@@ -15,6 +15,11 @@ type PageProps = {
 
 export function generateStaticParams() {
   return MOCK_PRODUCTS.map((product) => ({ slug: product.slug }));
+}
+
+function absoluteUrl(path: string) {
+  const base = SITE.url.replace(/\/$/, "");
+  return `${base}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -27,7 +32,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       title: `${product.name} | Casa Testa`,
       description: product.shortDescription,
-      images: [{ url: product.imageSrc, alt: product.imageAlt }],
+      images: [{ url: absoluteUrl(product.imageSrc), alt: product.imageAlt }],
     },
   };
 }
@@ -38,7 +43,7 @@ export default async function ProductoDetallePage({ params }: PageProps) {
   if (!product) notFound();
 
   const waText = encodeURIComponent(
-    `Hola Casa Testa, me interesa ${product.name}. ¿Me comparten disponibilidad?`
+    `Hola Casa Testa, me interesa ${product.name} (${product.sku}). ¿Me comparten disponibilidad?`
   );
 
   return (
@@ -51,29 +56,49 @@ export default async function ProductoDetallePage({ params }: PageProps) {
               alt={product.imageAlt}
               fill
               priority
+              placeholder="empty"
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
           </div>
-          <p className="text-xs text-muted-foreground">
-            Imagen de referencia vía Unsplash — reemplazable por fotografía propia
-            del producto.
+          <p className="text-xs leading-relaxed text-muted-foreground">
+            Fotografía de referencia tomada en el salón. En tienda podés ver la
+            pieza, comparar acabados y confirmar medidas antes de llevarla.
           </p>
         </div>
 
         <div className="space-y-8">
-          <div className="space-y-3">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
-              {PRODUCT_CATEGORY_LABEL[product.category]}
-            </p>
+          <div className="space-y-4">
+            <div className="flex flex-wrap items-center gap-2">
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
+                {PRODUCT_CATEGORY_LABEL[product.category]}
+              </p>
+              <span className="rounded-full border border-border/70 bg-muted/50 px-2.5 py-0.5 text-[0.65rem] font-medium uppercase tracking-wide text-muted-foreground">
+                {product.sku}
+              </span>
+              {product.inStock ? (
+                <span className="rounded-full border border-primary/25 bg-primary/10 px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wide text-primary">
+                  Disponible en salón
+                </span>
+              ) : (
+                <span className="rounded-full border border-border/80 bg-card px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wide text-muted-foreground">
+                  Sin stock
+                </span>
+              )}
+            </div>
             <h1 className="font-heading text-4xl font-semibold tracking-tight text-balance text-foreground sm:text-5xl">
               {product.name}
             </h1>
             <p className="text-lg leading-relaxed text-muted-foreground">
               {product.shortDescription}
             </p>
-            <p className="text-3xl font-semibold text-foreground">
-              {formatArs(product.price)}
-            </p>
+            <div className="flex flex-wrap items-baseline gap-3">
+              <p className="text-3xl font-semibold text-foreground">{formatArs(product.price)}</p>
+              {product.compareAtPrice ? (
+                <p className="text-lg text-muted-foreground line-through">
+                  {formatArs(product.compareAtPrice)}
+                </p>
+              ) : null}
+            </div>
           </div>
 
           <div className="space-y-3 rounded-3xl border border-border/70 bg-card/80 p-6 backdrop-blur-sm">

@@ -6,11 +6,11 @@ import { ProductCatalog } from "@/components/products/product-catalog";
 export const metadata: Metadata = {
   title: "Productos",
   description:
-    "Catálogo mock de ollas, vajilla, cocina y decoración con estética italiana premium. Casa Testa, Caseros.",
+    "Ollas, sartenes, vajilla, cocina, decoración y pizzellas con curaduría italiana. Casa Testa, Caseros.",
   openGraph: {
     title: "Productos | Casa Testa",
     description:
-      "Explorá el catálogo visual: filtros, cards y fotografías reales mientras definimos el backend.",
+      "Catálogo visual con filtros claros y fotografía del salón — listo para conectar stock y checkout cuando operen online.",
   },
 };
 

@@ -6,7 +6,7 @@ import { SectionHeader } from "@/components/marketing/section-header";
 import { OptimizedImage } from "@/components/media/optimized-image";
 import { RepairInquiryForm } from "@/components/repairs/repair-inquiry-form";
 import { Button } from "@/components/ui/button";
-import { WHATSAPP_CHAT_URL } from "@/lib/constants";
+import { SITE_IMAGES, WHATSAPP_CHAT_URL } from "@/lib/constants";
 import { MOCK_REPAIR_SERVICES } from "@/lib/mocks";
 
 export const metadata: Metadata = {
@@ -29,7 +29,7 @@ export default function ReparacionesPage() {
             <SectionHeader
               eyebrow="Taller Casa Testa"
               title="Reparar también es honrar lo que ya cocinó con vos"
-              description="No acumulamos pedidos sin sentido: miramos la pieza, escuchamos la historia y decidimos juntos si vale la pena intervenir. Cuando decimos que sí, lo hacemos con tiempo y criterio."
+              description="No acumulamos pedidos sin criterio: miramos la pieza, escuchamos la historia y decidimos juntos si vale la pena intervenir. Cuando decimos que sí, trabajamos con tiempo, diagnóstico claro y manos que conocen el oficio."
             />
             <Button
               nativeButton={false}
@@ -45,8 +45,8 @@ export default function ReparacionesPage() {
           <FadeIn>
             <div className="relative aspect-[5/4] overflow-hidden rounded-[2rem] border border-border/70 shadow-xl">
               <OptimizedImage
-                src="https://images.unsplash.com/photo-1584990340619-374305e7ade0?auto=format&fit=crop&w=1600&q=80"
-                alt="Detalle de utensilios de cocina metálicos"
+                src={SITE_IMAGES.pages.reparaciones}
+                alt={SITE_IMAGES.pages.reparacionesAlt}
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
@@ -60,7 +60,7 @@ export default function ReparacionesPage() {
           <SectionHeader
             eyebrow="Qué restauramos"
             title="Un taller que entiende hierro, gres y paciencia"
-            description="Lista mock de especialidades: sirve para validar jerarquía de información antes de conectar turnos reales."
+            description="Servicios pensados para ordenar la información antes de digitalizar turnos y presupuestos. Cada ítem resume un tipo de pieza que ya pasó por nuestras manos."
           />
         </FadeIn>
 

@@ -1,82 +1,79 @@
 import type { MockPizzelleMold } from "./types";
+import { SITE_IMAGES } from "@/lib/constants/site-images";
+
+const P = SITE_IMAGES.products;
 
 export const MOCK_PIZZELLE_MOLDS: MockPizzelleMold[] = [
   {
     id: "m1",
     name: "Ferro della Nonna",
-    subtitle: "Clásico de hierro fundido, peso honesto.",
+    subtitle: "Hierro fundido, peso honesto, dorado profundo.",
     diameterCm: "12 cm",
     material: "Hierro fundido curado",
-    heat: "Fogón, horno, inducción (con difusor)",
+    heat: "Gas, horno, inducción con difusor",
     story:
-      "El hierro guarda memoria de fuego lento. Cada pizzella sale dorada, con borde crocante y corazón tierno.",
-    imageSrc:
-      "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=1200&q=80",
+      "El hierro guarda memoria de fuego lento. Cada pizzella sale con borde crocante y corazón tierno, como cuando la casa entera esperaba el olor antes de ver la mesa.",
+    imageSrc: P.goldenBread,
     imageAlt: "Pan artesanal dorado sobre tabla de madera",
   },
   {
     id: "m2",
     name: "Ceramica Ligure",
-    subtitle: "Terracota esmaltada, tacto cálido.",
+    subtitle: "Gres esmaltado, tacto cálido, dorado suave.",
     diameterCm: "11 cm",
     material: "Gres esmaltado",
     heat: "Placa eléctrica, horno",
     story:
-      "Para quienes buscan una dorado más suave y aromático. El esmalte crema evita que el impasto se pegue con ansiedad.",
-    imageSrc:
-      "https://images.unsplash.com/photo-1615937657715-bc7b4b7962c1?auto=format&fit=crop&w=1200&q=80",
-    imageAlt: "Masa cruda sobre superficie de cocina",
+      "Para impastos delicados y rellenos dulces que no piden costra agresiva. El esmalto crema guía el desmoldado sin ansiedad: la cocina también puede ser susurro.",
+    imageSrc: P.doughBench,
+    imageAlt: "Masa trabajada sobre mesada con harina y luz lateral",
   },
   {
     id: "m3",
     name: "Doppio Tradizione",
-    subtitle: "Doble cavidad, ritmo de taller.",
-    diameterCm: "10 cm (x2)",
+    subtitle: "Doble cavidad, ritmo de taller familiar.",
+    diameterCm: "10 cm (×2)",
     material: "Aluminio forjado",
-    heat: "Gas, vitro",
+    heat: "Gas, vitrocerámica",
     story:
-      "Dos pizzellas a la vez, mismas reglas de temperatura. Ideal para mesas familiares donde nadie quiere esperar el segundo round.",
-    imageSrc:
-      "https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=1200&q=80",
-    imageAlt: "Preparación de pan en cocina luminosa",
+      "Dos pizzellas en una sola pasada: misma temperatura, misma paciencia. Ideal cuando la mesa está llena de manos pequeñas que no quieren esperar el segundo turno.",
+    imageSrc: P.wafflePress,
+    imageAlt: "Prensa de cocina y preparación artesanal",
   },
   {
     id: "m4",
     name: "Bruno di Siena",
-    subtitle: "Textura rugosa, costra audaz.",
+    subtitle: "Textura viva, costra audaz, carácter sureño.",
     diameterCm: "13 cm",
     material: "Hierro colado envejecido",
     heat: "Gas, leña",
     story:
-      "Un molde con carácter: exige mantequilla clarificada y mano firme. La recompensa es una costra profunda, casi canción.",
-    imageSrc:
-      "https://images.unsplash.com/photo-1486427944299-d1955d23e34d?auto=format&fit=crop&w=1200&q=80",
-    imageAlt: "Panadería con panes dorados en estantes",
+      "Exige mantequilla clarificada y mano firme. La recompensa es una costra profunda, casi canción, con el aroma que se cuela por el pasillo antes de llegar al plato.",
+    imageSrc: P.bakeryRacks,
+    imageAlt: "Estantes de panadería con panes dorados",
   },
   {
     id: "m5",
     name: "Oro Puglia",
-    subtitle: "Borde bajo, diseño para impasto fino.",
+    subtitle: "Borde bajo, impasto fino, bronce alimentario.",
     diameterCm: "9,5 cm",
     material: "Bronce alimentario",
     heat: "Gas suave",
     story:
-      "Pensado para impasto delicado y rellenos dulces. El bronce conduce el calor con elegancia, sin estridencias.",
-    imageSrc:
-      "https://images.unsplash.com/photo-1517433670267-08bbd4f89046?auto=format&fit=crop&w=1200&q=80",
-    imageAlt: "Café y pastelería en mesa de mármol",
+      "Pensado para rellenos dulces y meriendas que saben a confitería de pueblo. El bronce conduce el calor con elegancia, sin estridencias ni quemaduras caprichosas.",
+    imageSrc: P.pastryTable,
+    imageAlt: "Mesa de pastelería con mármol y detalles delicados",
   },
   {
     id: "m6",
     name: "Neve Alpina",
-    subtitle: "Acero inoxidable pulido espejo.",
+    subtitle: "Acero pulido, línea limpia, cocina contemporánea.",
     diameterCm: "11,5 cm",
     material: "Acero inoxidable 18/10",
     heat: "Inducción, vitro",
     story:
-      "Para cocinas contemporáneas que no renuncian al ritual. Limpieza sencilla, línea limpia, resultado consistente.",
-    imageSrc:
-      "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=1200&q=80",
-    imageAlt: "Cocina moderna con utensilios metálicos",
+      "Para cocinas actuales que no renuncian al ritual. Limpieza sencilla, resultado consistente y un brillo que convive con el mármol frío y la madera cálida.",
+    imageSrc: P.kitchenCounter,
+    imageAlt: "Cocina moderna con utensilios metálicos ordenados",
   },
 ];

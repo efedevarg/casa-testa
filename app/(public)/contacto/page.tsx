@@ -5,7 +5,7 @@ import { SectionHeader } from "@/components/marketing/section-header";
 import { OptimizedImage } from "@/components/media/optimized-image";
 import { ContactForm } from "@/components/contact/contact-form";
 import { InstagramMark } from "@/components/icons/instagram-mark";
-import { SITE, WHATSAPP_CHAT_URL } from "@/lib/constants";
+import { SITE, SITE_IMAGES, WHATSAPP_CHAT_URL } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Contacto",
@@ -25,7 +25,7 @@ export default function ContactoPage() {
           <SectionHeader
             eyebrow="Contacto"
             title="Estamos a un mensaje de distancia"
-            description="Pasá por el salón, escribinos o dejanos una nota en el formulario mock: vamos afinando la experiencia antes de conectar envíos reales."
+            description="Coordinamos visitas, respondemos consultas y recibimos notas por el formulario mientras afinamos la operación. Elegí el canal que te resulte más natural."
           />
         </FadeIn>
       </section>
@@ -36,8 +36,8 @@ export default function ContactoPage() {
             <div className="overflow-hidden rounded-[2rem] border border-border/70 shadow-lg">
               <div className="relative aspect-[16/11]">
                 <OptimizedImage
-                  src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=1600&q=80"
-                  alt="Personas compartiendo una mesa con bebidas"
+                  src={SITE_IMAGES.pages.contacto}
+                  alt={SITE_IMAGES.pages.contactoAlt}
                   fill
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
@@ -85,7 +85,7 @@ export default function ContactoPage() {
                 </dd>
               </div>
               <div>
-                <dt className="font-semibold text-foreground">Horarios mock</dt>
+                <dt className="font-semibold text-foreground">Horarios</dt>
                 <dd className="mt-1">
                   Lun a sáb · 10:00 a 13:30 y 16:00 a 19:30
                   <br />

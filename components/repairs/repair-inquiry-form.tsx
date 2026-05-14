@@ -36,8 +36,9 @@ export function RepairInquiryForm() {
             Consulta de reparación
           </h2>
           <p className="text-sm leading-relaxed text-muted-foreground">
-            Formulario visual mock: no envía datos todavía. Cuando conectemos
-            backend, el mismo layout recibirá tu mensaje de verdad.
+            Contanos el caso con fotos claras: hoy el envío es de demostración;
+            conservamos este diseño para enchufar backend y respuestas reales
+            sin cambiar tu flujo.
           </p>
         </div>
 
@@ -69,15 +70,16 @@ export function RepairInquiryForm() {
 
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <Button type="submit" size="lg" className="rounded-full sm:w-auto">
-            Enviar consulta (mock)
+            Enviar consulta
           </Button>
           {sent ? (
             <p className="text-sm font-medium text-primary">
-              Gracias — este envío es solo visual por ahora.
+              Gracias — por ahora es demostración; te pedimos que, si es urgente,
+              nos escribas por WhatsApp con fotos.
             </p>
           ) : (
             <p className="text-xs text-muted-foreground">
-              Respondemos por WhatsApp cuando activemos el flujo real.
+              Mientras activamos el backend, priorizamos respuesta por WhatsApp.
             </p>
           )}
         </div>

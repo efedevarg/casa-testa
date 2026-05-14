@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { HomePageView } from "@/components/home/home-page-view";
-import { SITE } from "@/lib/constants/site";
+import { SITE } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Inicio",

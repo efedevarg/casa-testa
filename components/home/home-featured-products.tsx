@@ -15,9 +15,9 @@ export function HomeFeaturedProducts() {
         <FadeIn>
           <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
             <SectionHeader
-              eyebrow="Selección del mes"
-              title="Piezas que enamoran a primera vista"
-              description="Una muestra curada de lo que hoy respira en nuestro salón: hierro honesto, cerámica cálida y herramientas que piden ser usadas."
+              eyebrow="Selección del salón"
+              title="Piezas que piden ser usadas, no guardadas"
+              description="Una muestra de lo que hoy respira en Casa Testa: hierro que pesa bien, cerámica que acaricia la luz y herramientas con nombre propio. Cada objeto viene con historia y criterio de cuidado."
             />
             <Button
               nativeButton={false}

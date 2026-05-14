@@ -17,6 +17,7 @@ const ALL = "todos" as const;
 
 const CATEGORY_ORDER: ProductCategoryId[] = [
   "ollas",
+  "sartenes",
   "vajilla",
   "cocina",
   "decoracion",
@@ -65,8 +66,8 @@ export function ProductCatalog() {
       <FadeIn>
         <SectionHeader
           eyebrow="Catálogo"
-          title="Piezas con nombre propio"
-          description="Una selección mock para validar la experiencia: filtros suaves, cards con alma de ecommerce premium y fotografías reales de cocina. El backend llegará cuando vos digas."
+          title="Objetos con nombre, precio y cariño de salón"
+          description="Una selección pensada para sentir la futura tienda: filtros claros, cards consistentes y fotografía propia del salón. El checkout llegará cuando la operación esté lista; hoy priorizamos la experiencia."
         />
       </FadeIn>
 

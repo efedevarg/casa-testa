@@ -24,8 +24,9 @@ export function ContactForm() {
             Escribinos
           </h2>
           <p className="text-sm leading-relaxed text-muted-foreground">
-            Mock de contacto: ideal para validar jerarquía visual y campos. La
-            integración con mail o CRM viene después.
+            Dejanos un mensaje con calma: en esta etapa el formulario nos ayuda a
+            validar la experiencia; pronto conectaremos envío real a nuestro mail
+            o CRM.
           </p>
         </div>
 
@@ -74,12 +75,13 @@ export function ContactForm() {
         </label>
 
         <Button type="submit" size="lg" className="w-full rounded-full sm:w-auto">
-          Enviar (mock)
+          Enviar mensaje
         </Button>
 
         {sent ? (
           <p className="text-sm font-medium text-primary">
-            Listo: este mensaje es solo de demostración.
+            Gracias — por ahora es una demostración; pronto recibirás confirmación
+            real desde Casa Testa.
           </p>
         ) : null}
       </form>
