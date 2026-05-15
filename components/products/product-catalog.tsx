@@ -6,8 +6,8 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FadeIn } from "@/components/marketing/fade-in";
 import { SectionHeader } from "@/components/marketing/section-header";
 import { ProductCard } from "@/components/products/product-card";
-import { PRODUCT_CATEGORY_LABEL, type ProductCategoryId } from "@/lib/mocks";
-import type { MockProduct } from "@/lib/mocks/types";
+import type { Product, ProductCategoryId } from "@/lib/data";
+import { PRODUCT_CATEGORY_LABEL } from "@/lib/data/labels";
 import { cn } from "@/lib/utils";
 
 const ALL = "todos" as const;
@@ -34,7 +34,7 @@ function isCategory(value: string | null): value is ProductCategoryId {
 }
 
 type ProductCatalogProps = {
-  products: MockProduct[];
+  products: Product[];
 };
 
 export function ProductCatalog({ products }: ProductCatalogProps) {

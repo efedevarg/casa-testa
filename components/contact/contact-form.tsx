@@ -1,22 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useActionState } from "react";
 
+import { submitContactInquiry } from "@/lib/actions/contact";
 import { FadeIn } from "@/components/marketing/fade-in";
 import { Button } from "@/components/ui/button";
 
 export function ContactForm() {
-  const [sent, setSent] = useState(false);
-
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setSent(true);
-  }
+  const [state, formAction, pending] = useActionState(submitContactInquiry, undefined);
 
   return (
     <FadeIn>
       <form
-        onSubmit={handleSubmit}
+        action={formAction}
         className="space-y-5 rounded-3xl border border-border/70 bg-card/90 p-6 shadow-sm backdrop-blur-sm sm:p-8"
       >
         <div className="space-y-2">
@@ -24,9 +20,8 @@ export function ContactForm() {
             Escribinos
           </h2>
           <p className="text-sm leading-relaxed text-muted-foreground">
-            Dejanos un mensaje con calma: en esta etapa el formulario nos ayuda a
-            validar la experiencia; pronto conectaremos envío real a nuestro mail
-            o CRM.
+            Dejanos tu consulta y la guardamos en nuestro sistema. Te respondemos por
+            email o WhatsApp según el caso.
           </p>
         </div>
 
@@ -36,7 +31,8 @@ export function ContactForm() {
             <input
               required
               name="name"
-              className="w-full rounded-xl border border-input bg-background px-3 py-2.5 text-sm outline-none transition-shadow focus-visible:border-ring focus-visible:ring-4 focus-visible:ring-ring/40"
+              disabled={pending}
+              className="w-full rounded-xl border border-input bg-background px-3 py-2.5 text-sm outline-none transition-shadow focus-visible:border-ring focus-visible:ring-4 focus-visible:ring-ring/40 disabled:opacity-60"
             />
           </label>
           <label className="space-y-2 text-sm">
@@ -45,7 +41,8 @@ export function ContactForm() {
               required
               name="email"
               type="email"
-              className="w-full rounded-xl border border-input bg-background px-3 py-2.5 text-sm outline-none transition-shadow focus-visible:border-ring focus-visible:ring-4 focus-visible:ring-ring/40"
+              disabled={pending}
+              className="w-full rounded-xl border border-input bg-background px-3 py-2.5 text-sm outline-none transition-shadow focus-visible:border-ring focus-visible:ring-4 focus-visible:ring-ring/40 disabled:opacity-60"
             />
           </label>
         </div>
@@ -54,7 +51,8 @@ export function ContactForm() {
           <span className="font-medium text-foreground">Motivo</span>
           <select
             name="topic"
-            className="w-full rounded-xl border border-input bg-background px-3 py-2.5 text-sm outline-none transition-shadow focus-visible:border-ring focus-visible:ring-4 focus-visible:ring-ring/40"
+            disabled={pending}
+            className="w-full rounded-xl border border-input bg-background px-3 py-2.5 text-sm outline-none transition-shadow focus-visible:border-ring focus-visible:ring-4 focus-visible:ring-ring/40 disabled:opacity-60"
             defaultValue="productos"
           >
             <option value="productos">Consulta por productos</option>
@@ -70,20 +68,31 @@ export function ContactForm() {
             required
             name="message"
             rows={4}
-            className="w-full rounded-xl border border-input bg-background px-3 py-2.5 text-sm outline-none transition-shadow focus-visible:border-ring focus-visible:ring-4 focus-visible:ring-ring/40"
+            disabled={pending}
+            className="w-full rounded-xl border border-input bg-background px-3 py-2.5 text-sm outline-none transition-shadow focus-visible:border-ring focus-visible:ring-4 focus-visible:ring-ring/40 disabled:opacity-60"
           />
         </label>
 
-        <Button type="submit" size="lg" className="w-full rounded-full sm:w-auto">
-          Enviar mensaje
-        </Button>
+        {state && !state.ok ? (
+          <p className="text-sm font-medium text-destructive">{state.error}</p>
+        ) : null}
 
-        {sent ? (
+        {state?.ok ? (
           <p className="text-sm font-medium text-primary">
-            Gracias — por ahora es una demostración; pronto recibirás confirmación
-            real desde Casa Testa.
+            {state.mode === "persisted"
+              ? "Mensaje recibido. Te contactamos pronto desde Casa Testa."
+              : "Gracias — el mensaje se registró en modo demo (Supabase no configurado)."}
           </p>
         ) : null}
+
+        <Button
+          type="submit"
+          size="lg"
+          disabled={pending}
+          className="w-full rounded-full sm:w-auto"
+        >
+          {pending ? "Enviando…" : "Enviar mensaje"}
+        </Button>
       </form>
     </FadeIn>
   );

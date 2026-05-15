@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "download:images": "node scripts/download-site-images.mjs",
     "generate:seed": "node scripts/generate-seed.mjs",
+    "db:types": "npx supabase gen types typescript --linked > lib/supabase/database.types.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },

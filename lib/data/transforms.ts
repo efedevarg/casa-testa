@@ -4,13 +4,14 @@ import type {
   ProductWithRelations,
   Tables,
 } from "@/lib/supabase/database.types";
+
 import type {
-  MockCategory,
-  MockPizzelleMold,
-  MockProduct,
-  MockRepairItem,
+  Category,
+  PizzelleMold,
+  Product,
   ProductCategoryId,
-} from "@/lib/mocks/types";
+  RepairService,
+} from "./domain";
 
 const CATEGORY_IMAGES = SITE_IMAGES.categories;
 const CATEGORY_HREFS: Record<ProductCategoryId, string> = {
@@ -26,7 +27,7 @@ function isProductCategoryId(slug: string): slug is ProductCategoryId {
   return slug in CATEGORY_IMAGES;
 }
 
-export function transformCategory(row: Tables<"categories">): MockCategory | null {
+export function transformCategory(row: Tables<"categories">): Category | null {
   if (!isProductCategoryId(row.slug)) return null;
 
   return {
@@ -39,7 +40,7 @@ export function transformCategory(row: Tables<"categories">): MockCategory | nul
   };
 }
 
-export function transformProduct(row: ProductWithRelations): MockProduct | null {
+export function transformProduct(row: ProductWithRelations): Product | null {
   const categorySlug = row.categories?.slug;
   if (!categorySlug || !isProductCategoryId(categorySlug)) return null;
 
@@ -65,7 +66,7 @@ export function transformProduct(row: ProductWithRelations): MockProduct | null 
   };
 }
 
-export function transformPizzelleMold(row: PizzellaMoldWithImages): MockPizzelleMold {
+export function transformPizzelleMold(row: PizzellaMoldWithImages): PizzelleMold {
   const image = row.pizzella_images?.[0];
   const paragraphs = row.description.split("\n\n").filter(Boolean);
   const heatLine = paragraphs.find((p) => p.startsWith("Calor:"));
@@ -87,7 +88,7 @@ export function transformPizzelleMold(row: PizzellaMoldWithImages): MockPizzelle
   };
 }
 
-export function transformRepairService(row: Tables<"repair_services">): MockRepairItem {
+export function transformRepairService(row: Tables<"repair_services">): RepairService {
   return {
     id: row.id,
     title: row.title,

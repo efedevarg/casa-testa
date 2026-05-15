@@ -210,6 +210,60 @@ export type Database = {
         };
         Relationships: [];
       };
+      contact_inquiries: {
+        Row: {
+          id: string;
+          name: string;
+          email: string;
+          topic: string;
+          message: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          email: string;
+          topic: string;
+          message: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          name?: string;
+          email?: string;
+          topic?: string;
+          message?: string;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      repair_inquiries: {
+        Row: {
+          id: string;
+          name: string;
+          email: string;
+          piece_description: string;
+          message: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          email: string;
+          piece_description: string;
+          message: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          name?: string;
+          email?: string;
+          piece_description?: string;
+          message?: string;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;

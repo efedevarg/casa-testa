@@ -1,4 +1,4 @@
-import type { ProductCategoryId } from "@/lib/mocks/types";
+import type { ProductCategoryId } from "@/lib/data/domain";
 
 /** Encuadre por categoría — evita crops que cortan el sujeto principal */
 export const CATEGORY_IMAGE_FOCUS: Record<ProductCategoryId, string> = {

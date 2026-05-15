@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { OptimizedImage } from "@/components/media/optimized-image";
 import { SITE, WHATSAPP_CHAT_URL } from "@/lib/constants";
 import { formatArs } from "@/lib/format";
-import { PRODUCT_CATEGORY_LABEL } from "@/lib/mocks";
+import { PRODUCT_CATEGORY_LABEL } from "@/lib/data/labels";
 import { fetchProductBySlug, fetchProductSlugs } from "@/lib/data/fetchers";
 
 type PageProps = {

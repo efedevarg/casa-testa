@@ -1,4 +1,4 @@
-import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { runSupabaseQuery } from "@/lib/supabase/helpers";
 import type { PizzellaMoldWithImages } from "@/lib/supabase/database.types";
 
 const MOLD_SELECT = `
@@ -7,12 +7,7 @@ const MOLD_SELECT = `
 `;
 
 export async function queryPizzelleMolds(): Promise<PizzellaMoldWithImages[]> {
-  const supabase = await createServerSupabaseClient();
-  const { data, error } = await supabase
-    .from("pizzella_molds")
-    .select(MOLD_SELECT)
-    .order("created_at", { ascending: true });
-
-  if (error) throw error;
-  return (data ?? []) as PizzellaMoldWithImages[];
+  return runSupabaseQuery("pizzelleMolds.list", async (supabase) =>
+    supabase.from("pizzella_molds").select(MOLD_SELECT).order("created_at", { ascending: true })
+  ) as Promise<PizzellaMoldWithImages[]>;
 }

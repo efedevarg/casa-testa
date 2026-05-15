@@ -5,12 +5,12 @@ import { m, useReducedMotion } from "framer-motion";
 
 import { OptimizedImage } from "@/components/media/optimized-image";
 import { formatArs } from "@/lib/format";
-import type { MockProduct } from "@/lib/mocks";
-import { PRODUCT_CATEGORY_LABEL } from "@/lib/mocks/labels";
+import type { Product } from "@/lib/data";
+import { PRODUCT_CATEGORY_LABEL } from "@/lib/data/labels";
 import { cn } from "@/lib/utils";
 
 type ProductCardProps = {
-  product: MockProduct;
+  product: Product;
   className?: string;
 };
 

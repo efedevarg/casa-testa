@@ -2,14 +2,14 @@
 
 import { FadeIn } from "@/components/marketing/fade-in";
 import { OptimizedImage } from "@/components/media/optimized-image";
-import type { MockPizzelleMold } from "@/lib/mocks";
+import type { PizzelleMold } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
 export function PizzelleMoldCard({
   mold,
   className,
 }: {
-  mold: MockPizzelleMold;
+  mold: PizzelleMold;
   className?: string;
 }) {
   return (

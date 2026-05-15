@@ -1,10 +1,16 @@
-/**
- * Tipos de dominio para la UI (estables aunque cambie el origen: mock o Supabase).
- */
 export type {
-  MockCategory as Category,
-  MockPizzelleMold as PizzelleMold,
-  MockProduct as Product,
-  MockRepairItem as RepairService,
+  Category,
+  DataSource,
+  PizzelleMold,
+  Product,
   ProductCategoryId,
-} from "@/lib/mocks/types";
+  RepairService,
+} from "./domain";
+
+/** Alias legacy — preferí `Product`, `Category`, etc. */
+export type {
+  Category as MockCategory,
+  PizzelleMold as MockPizzelleMold,
+  Product as MockProduct,
+  RepairService as MockRepairItem,
+} from "./domain";

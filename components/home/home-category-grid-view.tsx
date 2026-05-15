@@ -11,11 +11,11 @@ import {
   CATEGORY_LAYOUT,
   type CategoryLayoutVariant,
 } from "@/lib/constants/category-visuals";
-import type { MockCategory } from "@/lib/mocks/types";
+import type { Category } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
 type HomeCategoryGridViewProps = {
-  categories: MockCategory[];
+  categories: Category[];
 };
 
 const LAYOUT_GRID_CLASS: Record<CategoryLayoutVariant, string> = {
@@ -71,7 +71,7 @@ function CategoryCard({
   objectPosition,
   reduceMotion,
 }: {
-  category: MockCategory;
+  category: Category;
   layout: CategoryLayoutVariant;
   objectPosition: string;
   reduceMotion: boolean | null;

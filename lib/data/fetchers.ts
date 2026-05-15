@@ -1,3 +1,4 @@
+import { unstable_cache } from "next/cache";
 import { cache } from "react";
 
 import { isSupabaseConfigured } from "@/lib/env";
@@ -18,20 +19,24 @@ import {
   queryProducts,
 } from "@/lib/queries/products";
 import { queryRepairServices } from "@/lib/queries/repair-services";
-import type { ProductCategoryId } from "@/lib/mocks/types";
-import type {
-  MockCategory,
-  MockPizzelleMold,
-  MockProduct,
-  MockRepairItem,
-} from "@/lib/mocks/types";
 
+import { CACHE_TAGS, CATALOG_REVALIDATE_SECONDS } from "./cache-tags";
+import type {
+  Category,
+  PizzelleMold,
+  Product,
+  ProductCategoryId,
+  RepairService,
+} from "./domain";
+import { getDataSource } from "./source";
 import {
   transformCategory,
   transformPizzelleMold,
   transformProduct,
   transformRepairService,
 } from "./transforms";
+
+export { getDataSource, shouldUseSupabase } from "./source";
 
 const CATEGORY_ORDER: ProductCategoryId[] = [
   "ollas",
@@ -42,7 +47,7 @@ const CATEGORY_ORDER: ProductCategoryId[] = [
   "pizzellas",
 ];
 
-function sortCategories(categories: MockCategory[]): MockCategory[] {
+function sortCategories(categories: Category[]): Category[] {
   return [...categories].sort(
     (a, b) => CATEGORY_ORDER.indexOf(a.id) - CATEGORY_ORDER.indexOf(b.id)
   );
@@ -59,66 +64,144 @@ async function withMockFallback<T>(
     if (result === null || result === undefined) return fallback;
     return result;
   } catch (error) {
-    console.error("[Casa Testa] Supabase fetch failed, using mocks:", error);
+    const message = error instanceof Error ? error.message : String(error);
+    if (message.includes("Invalid path specified in request URL")) {
+      console.warn(
+        "[Casa Testa] Supabase: URL inválida en NEXT_PUBLIC_SUPABASE_URL. Usá la Project URL (https://<ref>.supabase.co) sin /rest/v1. Usando mocks."
+      );
+    } else if (message.includes("Could not find the table")) {
+      console.warn(
+        "[Casa Testa] Supabase: faltan tablas en la base. Ejecutá las migraciones en supabase/migrations/ y supabase/seed.sql. Usando mocks."
+      );
+    } else {
+      console.error(`[Casa Testa] Supabase (${getDataSource()}) fallback:`, error);
+    }
     return fallback;
   }
 }
 
-export const fetchCategories = cache(async (): Promise<MockCategory[]> => {
-  return withMockFallback(async () => {
-    const rows = await queryCategories();
-    const mapped = rows
-      .map(transformCategory)
-      .filter((c): c is MockCategory => c !== null);
-    return sortCategories(mapped);
-  }, sortCategories(MOCK_CATEGORIES));
+function cachedCatalog<T>(
+  key: string,
+  tag: string,
+  loader: () => Promise<T>
+): () => Promise<T> {
+  return unstable_cache(loader, [key], {
+    tags: [tag],
+    revalidate: CATALOG_REVALIDATE_SECONDS,
+  });
+}
+
+async function loadCategoriesFromDb(): Promise<Category[]> {
+  const rows = await queryCategories();
+  return sortCategories(
+    rows.map(transformCategory).filter((c): c is Category => c !== null)
+  );
+}
+
+async function loadProductsFromDb(): Promise<Product[]> {
+  const rows = await queryProducts();
+  return rows.map(transformProduct).filter((p): p is Product => p !== null);
+}
+
+async function loadProductBySlugFromDb(slug: string): Promise<Product | undefined> {
+  const row = await queryProductBySlug(slug);
+  if (!row) return undefined;
+  return transformProduct(row) ?? undefined;
+}
+
+async function loadFeaturedFromDb(limit: number): Promise<Product[]> {
+  const rows = await queryFeaturedProducts(limit);
+  const products = rows.map(transformProduct).filter((p): p is Product => p !== null);
+  return products.length > 0 ? products : getMockFeaturedProducts(limit);
+}
+
+async function loadPizzelleMoldsFromDb(): Promise<PizzelleMold[]> {
+  const rows = await queryPizzelleMolds();
+  return rows.map(transformPizzelleMold);
+}
+
+async function loadRepairServicesFromDb(): Promise<RepairService[]> {
+  const rows = await queryRepairServices();
+  return rows.map(transformRepairService);
+}
+
+export const fetchCategories = cache(async (): Promise<Category[]> => {
+  const fallback = sortCategories(MOCK_CATEGORIES);
+  if (!isSupabaseConfigured()) return fallback;
+
+  return withMockFallback(
+    () => cachedCatalog("categories", CACHE_TAGS.categories, loadCategoriesFromDb)(),
+    fallback
+  );
 });
 
-export const fetchProducts = cache(async (): Promise<MockProduct[]> => {
-  return withMockFallback(async () => {
-    const rows = await queryProducts();
-    return rows
-      .map(transformProduct)
-      .filter((p): p is MockProduct => p !== null);
-  }, MOCK_PRODUCTS);
+export const fetchProducts = cache(async (): Promise<Product[]> => {
+  if (!isSupabaseConfigured()) return MOCK_PRODUCTS;
+
+  return withMockFallback(
+    () => cachedCatalog("products", CACHE_TAGS.products, loadProductsFromDb)(),
+    MOCK_PRODUCTS
+  );
 });
 
 export const fetchProductBySlug = cache(
-  async (slug: string): Promise<MockProduct | undefined> => {
-    return withMockFallback(async () => {
-      const row = await queryProductBySlug(slug);
-      if (!row) return undefined;
-      return transformProduct(row) ?? undefined;
-    }, getMockProductBySlug(slug));
+  async (slug: string): Promise<Product | undefined> => {
+    const fallback = getMockProductBySlug(slug);
+    if (!isSupabaseConfigured()) return fallback;
+
+    return withMockFallback(
+      () =>
+        cachedCatalog(
+          `product-${slug}`,
+          CACHE_TAGS.product(slug),
+          () => loadProductBySlugFromDb(slug)
+        )(),
+      fallback
+    );
   }
 );
 
 export const fetchFeaturedProducts = cache(
-  async (limit = 4): Promise<MockProduct[]> => {
-    return withMockFallback(async () => {
-      const rows = await queryFeaturedProducts(limit);
-      const products = rows
-        .map(transformProduct)
-        .filter((p): p is MockProduct => p !== null);
-      return products.length > 0 ? products : getMockFeaturedProducts(limit);
-    }, getMockFeaturedProducts(limit));
+  async (limit = 4): Promise<Product[]> => {
+    const fallback = getMockFeaturedProducts(limit);
+    if (!isSupabaseConfigured()) return fallback;
+
+    return withMockFallback(
+      () =>
+        cachedCatalog(`featured-${limit}`, CACHE_TAGS.products, () =>
+          loadFeaturedFromDb(limit)
+        )(),
+      fallback
+    );
   }
 );
 
 export const fetchProductSlugs = cache(async (): Promise<string[]> => {
+  if (!isSupabaseConfigured()) return MOCK_PRODUCTS.map((p) => p.slug);
+
   return withMockFallback(async () => queryProductSlugs(), MOCK_PRODUCTS.map((p) => p.slug));
 });
 
-export const fetchPizzelleMolds = cache(async (): Promise<MockPizzelleMold[]> => {
-  return withMockFallback(async () => {
-    const rows = await queryPizzelleMolds();
-    return rows.map(transformPizzelleMold);
-  }, MOCK_PIZZELLE_MOLDS);
+export const fetchPizzelleMolds = cache(async (): Promise<PizzelleMold[]> => {
+  if (!isSupabaseConfigured()) return MOCK_PIZZELLE_MOLDS;
+
+  return withMockFallback(
+    () =>
+      cachedCatalog("pizzelle-molds", CACHE_TAGS.pizzelleMolds, loadPizzelleMoldsFromDb)(),
+    MOCK_PIZZELLE_MOLDS
+  );
 });
 
-export const fetchRepairServices = cache(async (): Promise<MockRepairItem[]> => {
-  return withMockFallback(async () => {
-    const rows = await queryRepairServices();
-    return rows.map(transformRepairService);
-  }, MOCK_REPAIR_SERVICES);
+export const fetchRepairServices = cache(async (): Promise<RepairService[]> => {
+  if (!isSupabaseConfigured()) return MOCK_REPAIR_SERVICES;
+
+  return withMockFallback(
+    () =>
+      cachedCatalog(
+        "repair-services",
+        CACHE_TAGS.repairServices,
+        loadRepairServicesFromDb
+      )(),
+    MOCK_REPAIR_SERVICES
+  );
 });
