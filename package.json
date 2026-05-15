@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint .",
     "download:images": "node scripts/download-site-images.mjs",
+    "generate:seed": "node scripts/generate-seed.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },

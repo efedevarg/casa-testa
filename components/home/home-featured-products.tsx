@@ -4,10 +4,10 @@ import { FadeIn } from "@/components/marketing/fade-in";
 import { SectionHeader } from "@/components/marketing/section-header";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/products/product-card";
-import { getFeaturedProducts } from "@/lib/mocks";
+import { fetchFeaturedProducts } from "@/lib/data/fetchers";
 
-export function HomeFeaturedProducts() {
-  const products = getFeaturedProducts(4);
+export async function HomeFeaturedProducts() {
+  const products = await fetchFeaturedProducts(4);
 
   return (
     <section className="border-y border-border/60 bg-muted/35 py-16 sm:py-20">
@@ -15,9 +15,9 @@ export function HomeFeaturedProducts() {
         <FadeIn>
           <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
             <SectionHeader
-              eyebrow="Selección del salón"
-              title="Piezas que piden ser usadas, no guardadas"
-              description="Una muestra de lo que hoy respira en Casa Testa: hierro que pesa bien, cerámica que acaricia la luz y herramientas con nombre propio. Cada objeto viene con historia y criterio de cuidado."
+              eyebrow="En el salón"
+              title="Piezas que pedimos ver antes de recomendar"
+              description="Una muestra de lo que hoy podés probar en mano en Caseros: hierro, cerámica y herramientas elegidas con criterio de cocina real."
             />
             <Button
               nativeButton={false}
@@ -25,7 +25,7 @@ export function HomeFeaturedProducts() {
               variant="outline"
               className="w-full shrink-0 rounded-full sm:w-auto"
             >
-              Ver catálogo completo
+              Ver catálogo
             </Button>
           </div>
         </FadeIn>

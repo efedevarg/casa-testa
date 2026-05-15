@@ -7,7 +7,7 @@ import { OptimizedImage } from "@/components/media/optimized-image";
 import { RepairInquiryForm } from "@/components/repairs/repair-inquiry-form";
 import { Button } from "@/components/ui/button";
 import { SITE_IMAGES, WHATSAPP_CHAT_URL } from "@/lib/constants";
-import { MOCK_REPAIR_SERVICES } from "@/lib/mocks";
+import { fetchRepairServices } from "@/lib/data/fetchers";
 
 export const metadata: Metadata = {
   title: "Reparaciones",
@@ -20,7 +20,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ReparacionesPage() {
+export default async function ReparacionesPage() {
+  const services = await fetchRepairServices();
+
   return (
     <div className="pb-20">
       <section className="relative overflow-hidden border-b border-border/60 bg-muted/30">
@@ -65,7 +67,7 @@ export default function ReparacionesPage() {
         </FadeIn>
 
         <div className="grid gap-5 md:grid-cols-2">
-          {MOCK_REPAIR_SERVICES.map((service, index) => (
+          {services.map((service, index) => (
             <FadeIn key={service.id} delay={index * 0.05}>
               <div className="h-full rounded-3xl border border-border/70 bg-card/90 p-6 shadow-sm backdrop-blur-sm">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">

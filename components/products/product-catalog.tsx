@@ -6,11 +6,8 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FadeIn } from "@/components/marketing/fade-in";
 import { SectionHeader } from "@/components/marketing/section-header";
 import { ProductCard } from "@/components/products/product-card";
-import {
-  MOCK_PRODUCTS,
-  PRODUCT_CATEGORY_LABEL,
-  type ProductCategoryId,
-} from "@/lib/mocks";
+import { PRODUCT_CATEGORY_LABEL, type ProductCategoryId } from "@/lib/mocks";
+import type { MockProduct } from "@/lib/mocks/types";
 import { cn } from "@/lib/utils";
 
 const ALL = "todos" as const;
@@ -36,7 +33,11 @@ function isCategory(value: string | null): value is ProductCategoryId {
   return !!value && value in PRODUCT_CATEGORY_LABEL;
 }
 
-export function ProductCatalog() {
+type ProductCatalogProps = {
+  products: MockProduct[];
+};
+
+export function ProductCatalog({ products }: ProductCatalogProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -48,9 +49,9 @@ export function ProductCatalog() {
   }, [searchParams]);
 
   const filtered = useMemo(() => {
-    if (category === ALL) return MOCK_PRODUCTS;
-    return MOCK_PRODUCTS.filter((p) => p.category === category);
-  }, [category]);
+    if (category === ALL) return products;
+    return products.filter((p) => p.category === category);
+  }, [category, products]);
 
   const setFilter = (next: ProductCategoryId | "todos") => {
     setCategory(next);
@@ -66,8 +67,8 @@ export function ProductCatalog() {
       <FadeIn>
         <SectionHeader
           eyebrow="Catálogo"
-          title="Objetos con nombre, precio y cariño de salón"
-          description="Una selección pensada para sentir la futura tienda: filtros claros, cards consistentes y fotografía propia del salón. El checkout llegará cuando la operación esté lista; hoy priorizamos la experiencia."
+          title="Objetos con nombre y precio de salón"
+          description="Filtrá por familia y consultá disponibilidad por WhatsApp. Cada pieza se puede ver y comparar en Av. San Martín antes de llevarla."
         />
       </FadeIn>
 
@@ -96,7 +97,7 @@ export function ProductCatalog() {
 
       {filtered.length === 0 ? (
         <p className="text-sm text-muted-foreground">
-          No hay productos en esta categoría (mock).
+          No hay productos en esta categoría por ahora.
         </p>
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">

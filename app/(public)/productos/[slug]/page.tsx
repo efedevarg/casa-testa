@@ -7,14 +7,16 @@ import { Button } from "@/components/ui/button";
 import { OptimizedImage } from "@/components/media/optimized-image";
 import { SITE, WHATSAPP_CHAT_URL } from "@/lib/constants";
 import { formatArs } from "@/lib/format";
-import { MOCK_PRODUCTS, PRODUCT_CATEGORY_LABEL, getProductBySlug } from "@/lib/mocks";
+import { PRODUCT_CATEGORY_LABEL } from "@/lib/mocks";
+import { fetchProductBySlug, fetchProductSlugs } from "@/lib/data/fetchers";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export function generateStaticParams() {
-  return MOCK_PRODUCTS.map((product) => ({ slug: product.slug }));
+export async function generateStaticParams() {
+  const slugs = await fetchProductSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 function absoluteUrl(path: string) {
@@ -24,7 +26,7 @@ function absoluteUrl(path: string) {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await fetchProductBySlug(slug);
   if (!product) return {};
   return {
     title: product.name,
@@ -39,7 +41,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function ProductoDetallePage({ params }: PageProps) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await fetchProductBySlug(slug);
   if (!product) notFound();
 
   const waText = encodeURIComponent(

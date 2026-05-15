@@ -7,7 +7,7 @@ export const MOCK_CATEGORIES: MockCategory[] = [
   {
     id: "ollas",
     title: "Ollas",
-    blurb: "Cocción lenta, aromas que vuelven a casa.",
+    blurb: "Guisos lentos, hierro honesto.",
     imageSrc: C.ollas,
     imageAlt: "Ollas de hierro y cocción artesanal sobre mesa de madera",
     href: "/productos?categoria=ollas",
@@ -15,7 +15,7 @@ export const MOCK_CATEGORIES: MockCategory[] = [
   {
     id: "sartenes",
     title: "Sartenes",
-    blurb: "Sellado preciso, superficies que respetan el producto.",
+    blurb: "Sellado limpio, calor parejo.",
     imageSrc: C.sartenes,
     imageAlt: "Sartén de acero sobre encimera clara",
     href: "/productos?categoria=sartenes",
@@ -23,7 +23,7 @@ export const MOCK_CATEGORIES: MockCategory[] = [
   {
     id: "vajilla",
     title: "Vajilla",
-    blurb: "Mesas que invitan a quedarse un poco más.",
+    blurb: "Mesa cálida, tacto sedoso.",
     imageSrc: C.vajilla,
     imageAlt: "Vajilla cerámica dispuesta con luz cálida",
     href: "/productos?categoria=vajilla",
@@ -31,7 +31,7 @@ export const MOCK_CATEGORIES: MockCategory[] = [
   {
     id: "cocina",
     title: "Cocina",
-    blurb: "Herramientas nobles para el ritual diario.",
+    blurb: "Utensilios para el ritual diario.",
     imageSrc: C.cocina,
     imageAlt: "Utensilios de cocina sobre encimera clara",
     href: "/productos?categoria=cocina",
@@ -39,7 +39,7 @@ export const MOCK_CATEGORIES: MockCategory[] = [
   {
     id: "decoracion",
     title: "Decoración",
-    blurb: "Piezas con presencia suave y carácter italiano.",
+    blurb: "Detalles con carácter italiano.",
     imageSrc: C.decoracion,
     imageAlt: "Detalles hogareños con luz natural y texturas cálidas",
     href: "/productos?categoria=decoracion",
@@ -47,7 +47,7 @@ export const MOCK_CATEGORIES: MockCategory[] = [
   {
     id: "pizzellas",
     title: "Pizzellas",
-    blurb: "El alma crocante de la tradición.",
+    blurb: "Crujido de tradición familiar.",
     imageSrc: C.pizzellas,
     imageAlt: "Pan artesanal y ambiente de panadería cálida",
     href: "/pizzellas",

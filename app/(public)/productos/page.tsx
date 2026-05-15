@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 
 import { ProductCatalog } from "@/components/products/product-catalog";
+import { fetchProducts } from "@/lib/data/fetchers";
 
 export const metadata: Metadata = {
   title: "Productos",
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Productos | Casa Testa",
     description:
-      "Catálogo visual con filtros claros y fotografía del salón — listo para conectar stock y checkout cuando operen online.",
+      "Catálogo con filtros claros y fotografía del salón — consultá disponibilidad por WhatsApp.",
   },
 };
 
@@ -31,11 +32,13 @@ function CatalogFallback() {
   );
 }
 
-export default function ProductosPage() {
+export default async function ProductosPage() {
+  const products = await fetchProducts();
+
   return (
     <div className="section-inline py-14 sm:py-16">
       <Suspense fallback={<CatalogFallback />}>
-        <ProductCatalog />
+        <ProductCatalog products={products} />
       </Suspense>
     </div>
   );

@@ -17,13 +17,13 @@ export function HomePizzelleFeature() {
       <FadeIn className="order-2 space-y-6 lg:order-1">
         <SectionHeader
           eyebrow="Pizzelle della Nonna"
-          title="Un molde no calienta solo masa: calienta recuerdos"
-          description="La pizzella es crujido, abrazo y mesa de domingo. Elegimos moldes con peso real, materiales nobles y acabados que entienden el fuego sin apurarse — como en la casa de la nonna, con el ritmo justo."
+          title="El crujido que heredás sin saber de quién"
+          description="Moldes con peso real, hierro curado y gres esmaltado. Te ayudamos a elegir según tu fogón y tu impasto."
         />
         <ul className="space-y-3 text-sm leading-relaxed text-muted-foreground">
-          <li>· Hierro, bronce y gres esmaltado seleccionados a mano.</li>
-          <li>· Historias de familia italiana tejidas en cada relieve.</li>
-          <li>· Asesoramos qué molde acompaña tu fogón y tu impasto.</li>
+          <li>· Hierro, bronce y gres probados en el salón.</li>
+          <li>· Relieves clásicos y acabados que respetan el fuego lento.</li>
+          <li>· Asesoramiento antes de comprar.</li>
         </ul>
         <Button
           nativeButton={false}

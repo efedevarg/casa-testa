@@ -48,8 +48,8 @@ export function HomeRepairsTeaser() {
         <FadeIn className="space-y-6">
           <SectionHeader
             eyebrow="Reparaciones"
-            title="Lo que ya cocinó con vos merece una segunda vida"
-            description="Ollas, sartenes, moldes y piezas con historia: las miramos con calma, explicamos qué tiene sentido restaurar y devolvemos el oficio con procesos claros, sin promesas mágicas."
+            title="Restaurar también es honrar lo que ya cocinó con vos"
+            description="Ollas, sartenes, moldes y gres: miramos la pieza, te decimos si conviene intervenir y trabajamos con plazos claros."
           />
           <Button
             nativeButton={false}

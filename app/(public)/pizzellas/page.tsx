@@ -7,7 +7,7 @@ import { OptimizedImage } from "@/components/media/optimized-image";
 import { PizzelleMoldCard } from "@/components/pizzellas/pizzelle-mold-card";
 import { Button } from "@/components/ui/button";
 import { SITE_IMAGES, WHATSAPP_CHAT_URL } from "@/lib/constants";
-import { MOCK_PIZZELLE_MOLDS } from "@/lib/mocks";
+import { fetchPizzelleMolds } from "@/lib/data/fetchers";
 
 export const metadata: Metadata = {
   title: "Pizzellas",
@@ -20,7 +20,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function PizzellasPage() {
+export default async function PizzellasPage() {
+  const molds = await fetchPizzelleMolds();
+
   return (
     <>
       <section className="relative isolate overflow-hidden">
@@ -45,10 +47,9 @@ export default function PizzellasPage() {
               El crujido que heredás sin saber de quién viene
             </h1>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              La pizzella es memoria audible: el molde caliente, el impasto fino,
-              el azúcar que nieva. En Casa Testa elegimos piezas con peso honesto
-              y materiales que respetan el fuego lento de la cocina italiana —
-              para que el ritual vuelva a sonar en tu casa.
+              El molde caliente, el impasto fino, el azúcar que nieva: en el
+              salón elegimos hierro y gres con peso real, para que el ritual
+              vuelva a sonar en tu cocina.
             </p>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <Button
@@ -79,14 +80,14 @@ export default function PizzellasPage() {
         <FadeIn>
           <SectionHeader
             eyebrow="Colección"
-            title="Moldes con nombre de pueblo y vocación emocional"
-            description="Seis propuestas con medidas, materiales y relato. Cuando el stock viva en sistema, este layout ya respira como vitrina premium: solo habrá que conectar datos reales."
+            title="Moldes con nombre de pueblo"
+            description="Medidas, materiales y relato de cada pieza. Vení a probar el peso en mano antes de elegir."
             align="center"
           />
         </FadeIn>
 
         <div className="grid gap-8 lg:grid-cols-3">
-          {MOCK_PIZZELLE_MOLDS.map((mold) => (
+          {molds.map((mold) => (
             <PizzelleMoldCard key={mold.id} mold={mold} />
           ))}
         </div>
