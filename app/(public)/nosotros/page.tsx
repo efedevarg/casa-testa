@@ -6,6 +6,11 @@ import { SectionHeader } from "@/components/marketing/section-header";
 import { OptimizedImage } from "@/components/media/optimized-image";
 import { Button } from "@/components/ui/button";
 import { SITE, SITE_IMAGES, WHATSAPP_CHAT_URL } from "@/lib/constants";
+import {
+  getSiteContent,
+  pickContent,
+  resolveSiteContentImage,
+} from "@/lib/data/site-content";
 
 export const metadata: Metadata = {
   title: "Nosotros",
@@ -22,7 +27,7 @@ const milestones = [
   {
     year: "Raíces",
     title: "Una mesa larga en Av. San Martín",
-    body: "Casa Testa empezó como un gesto doméstico que fue creciendo: primero las ollas que curábamos para vecinos, después las pizzellas que salían a la merienda, después el deseo de elegir piezas con nombre propio y contar por qué estaban ahí.",
+    body: "", // reemplazado en runtime con about_intro
   },
   {
     year: "Oficio",
@@ -36,14 +41,24 @@ const milestones = [
   },
 ];
 
-export default function NosotrosPage() {
+export default async function NosotrosPage() {
+  const content = await getSiteContent();
+  const timeline = [
+    { ...milestones[0], body: pickContent(content, "about_intro") },
+    ...milestones.slice(1),
+  ];
+
   return (
     <div className="pb-20">
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
           <OptimizedImage
-            src={SITE_IMAGES.pages.nosotrosHero}
-            alt={SITE_IMAGES.pages.nosotrosHeroAlt}
+            src={resolveSiteContentImage(
+              content,
+              "nosotros_hero_image_url",
+              SITE_IMAGES.pages.nosotrosHero
+            )}
+            alt={pickContent(content, "nosotros_hero_image_alt")}
             fill
             priority
             className="object-cover"
@@ -115,7 +130,7 @@ export default function NosotrosPage() {
             />
           </FadeIn>
           <div className="grid gap-6 lg:grid-cols-3">
-            {milestones.map((item, index) => (
+            {timeline.map((item, index) => (
               <FadeIn key={item.title} delay={index * 0.06}>
                 <article className="h-full rounded-3xl border border-border/70 bg-card/90 p-6 shadow-sm backdrop-blur-sm">
                   <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">

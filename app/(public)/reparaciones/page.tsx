@@ -8,6 +8,11 @@ import { RepairInquiryForm } from "@/components/repairs/repair-inquiry-form";
 import { Button } from "@/components/ui/button";
 import { SITE_IMAGES, WHATSAPP_CHAT_URL } from "@/lib/constants";
 import { fetchRepairServices } from "@/lib/data/fetchers";
+import {
+  getSiteContent,
+  pickContent,
+  resolveSiteContentImage,
+} from "@/lib/data/site-content";
 
 export const metadata: Metadata = {
   title: "Reparaciones",
@@ -21,7 +26,10 @@ export const metadata: Metadata = {
 };
 
 export default async function ReparacionesPage() {
-  const services = await fetchRepairServices();
+  const [services, content] = await Promise.all([
+    fetchRepairServices(),
+    getSiteContent(),
+  ]);
 
   return (
     <div className="pb-20">
@@ -31,7 +39,7 @@ export default async function ReparacionesPage() {
             <SectionHeader
               eyebrow="Taller Casa Testa"
               title="Reparar también es honrar lo que ya cocinó con vos"
-              description="No acumulamos pedidos sin criterio: miramos la pieza, escuchamos la historia y decidimos juntos si vale la pena intervenir. Cuando decimos que sí, trabajamos con tiempo, diagnóstico claro y manos que conocen el oficio."
+              description={pickContent(content, "reparaciones_intro")}
             />
             <Button
               nativeButton={false}
@@ -47,8 +55,12 @@ export default async function ReparacionesPage() {
           <FadeIn>
             <div className="relative aspect-[5/4] overflow-hidden rounded-[2rem] border border-border/70 shadow-xl">
               <OptimizedImage
-                src={SITE_IMAGES.pages.reparaciones}
-                alt={SITE_IMAGES.pages.reparacionesAlt}
+                src={resolveSiteContentImage(
+                  content,
+                  "reparaciones_image_url",
+                  SITE_IMAGES.pages.reparaciones
+                )}
+                alt={pickContent(content, "reparaciones_image_alt")}
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />

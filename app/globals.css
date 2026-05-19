@@ -12,6 +12,8 @@
     "Liberation Mono", "Courier New", monospace;
   --font-heading: var(--font-heading-family), ui-serif, Georgia, "Times New Roman",
     serif;
+  --font-brand: var(--font-brand-family), var(--font-heading-family), ui-serif,
+    Georgia, "Times New Roman", serif;
   --breakpoint-xs: 30rem;
   --breakpoint-3xl: 120rem;
   --color-sidebar-ring: var(--sidebar-ring);

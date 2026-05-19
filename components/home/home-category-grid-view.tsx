@@ -16,6 +16,8 @@ import { cn } from "@/lib/utils";
 
 type HomeCategoryGridViewProps = {
   categories: Category[];
+  curaduriaTitle: string;
+  curaduriaDescription: string;
 };
 
 const LAYOUT_GRID_CLASS: Record<CategoryLayoutVariant, string> = {
@@ -25,7 +27,11 @@ const LAYOUT_GRID_CLASS: Record<CategoryLayoutVariant, string> = {
   wide: "col-span-1 row-span-1 sm:col-span-3 min-h-[200px] sm:min-h-[220px]",
 };
 
-export function HomeCategoryGridView({ categories }: HomeCategoryGridViewProps) {
+export function HomeCategoryGridView({
+  categories,
+  curaduriaTitle,
+  curaduriaDescription,
+}: HomeCategoryGridViewProps) {
   const reduce = useReducedMotion();
 
   return (
@@ -34,8 +40,8 @@ export function HomeCategoryGridView({ categories }: HomeCategoryGridViewProps) 
         <FadeIn>
           <SectionHeader
             eyebrow="Curaduría"
-            title="Seis maneras de habitar la cocina"
-            description="Elegimos por familia, no por volumen: piezas que se sienten en la mano, duran en el tiempo y tienen historia que contar en el salón."
+            title={curaduriaTitle}
+            description={curaduriaDescription}
           />
         </FadeIn>
 

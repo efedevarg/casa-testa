@@ -17,13 +17,22 @@ const CAT = {
   pizzellas: "11111111-1111-4111-8111-000000000006",
 };
 
+const categoryImages = {
+  ollas: "/images/categories/ollas.jpg",
+  sartenes: "/images/categories/sartenes.jpg",
+  vajilla: "/images/categories/vajilla.jpg",
+  cocina: "/images/categories/cocina.jpg",
+  decoracion: "/images/categories/decoracion.jpg",
+  pizzellas: "/images/categories/pizzellas.jpg",
+};
+
 const categories = [
-  ["Ollas", "ollas", "Cocción lenta y aromas que vuelven a casa.", true],
-  ["Sartenes", "sartenes", "Sellado preciso para el gesto diario.", true],
-  ["Vajilla", "vajilla", "Mesas que invitan a quedarse un poco más.", true],
-  ["Cocina", "cocina", "Herramientas nobles para el ritual cotidiano.", true],
-  ["Decoración", "decoracion", "Detalles con presencia suave y carácter italiano.", false],
-  ["Pizzellas", "pizzellas", "El crujido que hereda la nonna.", true],
+  ["Ollas", "ollas", "Cocción lenta y aromas que vuelven a casa.", true, "ollas"],
+  ["Sartenes", "sartenes", "Sellado preciso para el gesto diario.", true, "sartenes"],
+  ["Vajilla", "vajilla", "Mesas que invitan a quedarse un poco más.", true, "vajilla"],
+  ["Cocina", "cocina", "Herramientas nobles para el ritual cotidiano.", true, "cocina"],
+  ["Decoración", "decoracion", "Detalles con presencia suave y carácter italiano.", false, "decoracion"],
+  ["Pizzellas", "pizzellas", "El crujido que hereda la nonna.", true, "pizzellas"],
 ];
 
 const products = [
@@ -74,12 +83,13 @@ const lines = [
   "",
   "truncate table public.product_images, public.products, public.pizzella_images, public.pizzella_molds, public.repair_services, public.categories cascade;",
   "",
-  "insert into public.categories (id, name, slug, description, featured) values",
+  "insert into public.categories (id, name, slug, description, featured, image_url) values",
 ];
 
-for (const [name, slug, desc, featured] of categories) {
+for (const [name, slug, desc, featured, slugKey] of categories) {
+  const imageUrl = categoryImages[slugKey];
   lines.push(
-    `  ('${CAT[slug]}', '${esc(name)}', '${slug}', '${esc(desc)}', ${featured}),`
+    `  ('${CAT[slug]}', '${esc(name)}', '${slug}', '${esc(desc)}', ${featured}, '${imageUrl}'),`
   );
 }
 lines[lines.length - 1] = lines[lines.length - 1].replace(/,$/, ";");

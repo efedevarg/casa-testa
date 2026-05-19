@@ -13,3 +13,9 @@ export {
   type ContactInquiryInsert,
   type RepairInquiryInsert,
 } from "./inquiries";
+export {
+  querySiteContent,
+  querySiteContentByKey,
+  upsertSiteContent,
+  type SiteContentRow,
+} from "./site-content";

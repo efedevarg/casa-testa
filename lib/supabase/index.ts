@@ -7,4 +7,13 @@ export {
   runSupabaseMutation,
   runSupabaseQuery,
 } from "./helpers";
+export {
+  STORAGE_BUCKETS,
+  deleteImage,
+  getPublicImageUrl,
+  normalizeStoragePath,
+  uploadImage,
+  validateImagePath,
+  type StorageBucket,
+} from "./storage";
 export type { Database, Json, Tables } from "./types";

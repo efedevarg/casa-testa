@@ -7,7 +7,6 @@ import { FadeIn } from "@/components/marketing/fade-in";
 import { SectionHeader } from "@/components/marketing/section-header";
 import { OptimizedImage } from "@/components/media/optimized-image";
 import { Button } from "@/components/ui/button";
-import { SITE_IMAGES } from "@/lib/constants";
 
 const steps = [
   {
@@ -28,14 +27,19 @@ const steps = [
   },
 ];
 
-export function HomeRepairsTeaser() {
+export type HomeRepairsTeaserProps = {
+  imageSrc: string;
+  imageAlt: string;
+};
+
+export function HomeRepairsTeaser({ imageSrc, imageAlt }: HomeRepairsTeaserProps) {
   return (
     <section className="relative overflow-hidden border-t border-border/60 bg-background py-16 sm:py-20">
       <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/2 lg:block">
         <div className="relative h-full min-h-[420px]">
           <OptimizedImage
-            src={SITE_IMAGES.home.repairsTeaser}
-            alt={SITE_IMAGES.home.repairsTeaserAlt}
+            src={imageSrc}
+            alt={imageAlt}
             fill
             className="object-cover opacity-40"
             sizes="50vw"

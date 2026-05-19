@@ -1,4 +1,5 @@
 import { SITE_IMAGES } from "@/lib/constants/site-images";
+import { resolveImageUrl } from "@/lib/data/resolve-image";
 import type {
   PizzellaMoldWithImages,
   ProductWithRelations,
@@ -30,11 +31,17 @@ function isProductCategoryId(slug: string): slug is ProductCategoryId {
 export function transformCategory(row: Tables<"categories">): Category | null {
   if (!isProductCategoryId(row.slug)) return null;
 
+  const fallbackImage = CATEGORY_IMAGES[row.slug];
+
   return {
     id: row.slug,
     title: row.name,
     blurb: row.description ?? "",
-    imageSrc: CATEGORY_IMAGES[row.slug],
+    imageSrc: resolveImageUrl(
+      row.image_url,
+      "categories",
+      fallbackImage
+    ),
     imageAlt: `${row.name} — Casa Testa`,
     href: CATEGORY_HREFS[row.slug],
   };
@@ -59,7 +66,11 @@ export function transformProduct(row: ProductWithRelations): Product | null {
     price: row.price,
     compareAtPrice: row.compare_at_price ?? undefined,
     category: categorySlug,
-    imageSrc: primary?.image_url ?? SITE_IMAGES.products.castIronCocotte,
+    imageSrc: resolveImageUrl(
+      primary?.image_url,
+      "products",
+      SITE_IMAGES.products.castIronCocotte
+    ),
     imageAlt: primary?.alt_text ?? row.name,
     featured: row.featured,
     inStock: row.stock > 0,
@@ -83,7 +94,11 @@ export function transformPizzelleMold(row: PizzellaMoldWithImages): PizzelleMold
     material: row.material ?? "",
     heat,
     story,
-    imageSrc: image?.image_url ?? SITE_IMAGES.products.goldenBread,
+    imageSrc: resolveImageUrl(
+      image?.image_url,
+      "pizzellas",
+      SITE_IMAGES.products.goldenBread
+    ),
     imageAlt: image?.alt_text ?? row.model_name,
   };
 }

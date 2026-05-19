@@ -5,6 +5,7 @@ export const CACHE_TAGS = {
   product: (slug: string) => `catalog:product:${slug}`,
   pizzelleMolds: "catalog:pizzelle-molds",
   repairServices: "catalog:repair-services",
+  siteContent: "site:content",
 } as const;
 
 /** Segundos entre revalidaciones automáticas del catálogo público */

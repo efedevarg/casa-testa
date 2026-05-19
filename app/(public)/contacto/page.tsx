@@ -6,6 +6,11 @@ import { OptimizedImage } from "@/components/media/optimized-image";
 import { ContactForm } from "@/components/contact/contact-form";
 import { InstagramMark } from "@/components/icons/instagram-mark";
 import { SITE, SITE_IMAGES, WHATSAPP_CHAT_URL } from "@/lib/constants";
+import {
+  getSiteContent,
+  pickContent,
+  resolveSiteContentImage,
+} from "@/lib/data/site-content";
 
 export const metadata: Metadata = {
   title: "Contacto",
@@ -17,7 +22,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ContactoPage() {
+export default async function ContactoPage() {
+  const content = await getSiteContent();
+
   return (
     <div className="pb-20">
       <section className="section-inline py-14 sm:py-16">
@@ -36,8 +43,12 @@ export default function ContactoPage() {
             <div className="overflow-hidden rounded-[2rem] border border-border/70 shadow-lg">
               <div className="relative aspect-[16/11]">
                 <OptimizedImage
-                  src={SITE_IMAGES.pages.contacto}
-                  alt={SITE_IMAGES.pages.contactoAlt}
+                  src={resolveSiteContentImage(
+                    content,
+                    "contacto_image_url",
+                    SITE_IMAGES.pages.contacto
+                  )}
+                  alt={pickContent(content, "contacto_image_alt")}
                   fill
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />

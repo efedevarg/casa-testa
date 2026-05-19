@@ -7,9 +7,19 @@ import { FadeIn } from "@/components/marketing/fade-in";
 import { SectionHeader } from "@/components/marketing/section-header";
 import { OptimizedImage } from "@/components/media/optimized-image";
 import { Button } from "@/components/ui/button";
-import { SITE_IMAGES } from "@/lib/constants";
+export type HomePizzelleFeatureProps = {
+  title: string;
+  description: string;
+  imageSrc: string;
+  imageAlt: string;
+};
 
-export function HomePizzelleFeature() {
+export function HomePizzelleFeature({
+  title,
+  description,
+  imageSrc,
+  imageAlt,
+}: HomePizzelleFeatureProps) {
   const reduce = useReducedMotion();
 
   return (
@@ -17,8 +27,8 @@ export function HomePizzelleFeature() {
       <FadeIn className="order-2 space-y-6 lg:order-1">
         <SectionHeader
           eyebrow="Pizzelle della Nonna"
-          title="El crujido que heredás sin saber de quién"
-          description="Moldes con peso real, hierro curado y gres esmaltado. Te ayudamos a elegir según tu fogón y tu impasto."
+          title={title}
+          description={description}
         />
         <ul className="space-y-3 text-sm leading-relaxed text-muted-foreground">
           <li>· Hierro, bronce y gres probados en el salón.</li>
@@ -38,8 +48,8 @@ export function HomePizzelleFeature() {
       <FadeIn className="order-1 lg:order-2">
         <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-border/70 shadow-xl">
           <OptimizedImage
-            src={SITE_IMAGES.home.pizzelleFeature}
-            alt={SITE_IMAGES.home.pizzelleFeatureAlt}
+            src={imageSrc}
+            alt={imageAlt}
             fill
             sizes="(max-width: 1024px) 100vw, 50vw"
             className="object-cover"

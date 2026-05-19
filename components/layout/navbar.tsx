@@ -102,7 +102,7 @@ export function Navbar() {
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/90 backdrop-blur-md">
       <div className="section-inline flex h-16 items-center justify-between gap-4 lg:h-[4.5rem]">
         <Link href="/" className="group flex items-center gap-2">
-          <span className="font-heading text-xl font-semibold tracking-tight text-foreground transition-colors group-hover:text-primary sm:text-2xl">
+          <span className="font-brand text-[1.35rem] font-normal tracking-[0.06em] text-foreground transition-colors group-hover:text-primary sm:text-[1.5rem] lg:text-[1.65rem]">
             {SITE.name}
           </span>
         </Link>
@@ -128,7 +128,9 @@ export function Navbar() {
             />
             <SheetContent side="right" className="gap-0 p-0 sm:max-w-sm">
               <SheetHeader className="border-b border-border px-4 py-4 text-left">
-                <SheetTitle className="font-heading text-lg">{SITE.name}</SheetTitle>
+                <SheetTitle className="font-brand text-xl font-normal tracking-[0.05em]">
+                  {SITE.name}
+                </SheetTitle>
               </SheetHeader>
               <MobileNav />
             </SheetContent>

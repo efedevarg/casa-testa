@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, DM_Sans } from "next/font/google";
+import { Cormorant_Garamond, DM_Sans, Marcellus } from "next/font/google";
 
 import { AppProviders } from "@/components/providers/app-providers";
 import { SITE } from "@/lib/constants/site";
@@ -17,6 +17,13 @@ const heading = Cormorant_Garamond({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-heading-family",
+  display: "swap",
+});
+
+const brand = Marcellus({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-brand-family",
   display: "swap",
 });
 
@@ -75,7 +82,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es-AR" suppressHydrationWarning>
-      <body className={`${body.variable} ${heading.variable} min-h-screen`}>
+      <body className={`${body.variable} ${heading.variable} ${brand.variable} min-h-screen`}>
         <AppProviders>{children}</AppProviders>
       </body>
     </html>

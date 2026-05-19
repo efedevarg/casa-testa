@@ -15,6 +15,7 @@ export type Database = {
           name: string;
           slug: string;
           description: string | null;
+          image_url: string | null;
           featured: boolean;
           created_at: string;
         };
@@ -23,6 +24,7 @@ export type Database = {
           name: string;
           slug: string;
           description?: string | null;
+          image_url?: string | null;
           featured?: boolean;
           created_at?: string;
         };
@@ -31,6 +33,7 @@ export type Database = {
           name?: string;
           slug?: string;
           description?: string | null;
+          image_url?: string | null;
           featured?: boolean;
           created_at?: string;
         };
@@ -234,6 +237,30 @@ export type Database = {
           topic?: string;
           message?: string;
           created_at?: string;
+        };
+        Relationships: [];
+      };
+      site_content: {
+        Row: {
+          id: string;
+          key: string;
+          value: string;
+          description: string | null;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          key: string;
+          value?: string;
+          description?: string | null;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          key?: string;
+          value?: string;
+          description?: string | null;
+          updated_at?: string;
         };
         Relationships: [];
       };

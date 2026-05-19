@@ -8,6 +8,11 @@ import { PizzelleMoldCard } from "@/components/pizzellas/pizzelle-mold-card";
 import { Button } from "@/components/ui/button";
 import { SITE_IMAGES, WHATSAPP_CHAT_URL } from "@/lib/constants";
 import { fetchPizzelleMolds } from "@/lib/data/fetchers";
+import {
+  getSiteContent,
+  pickContent,
+  resolveSiteContentImage,
+} from "@/lib/data/site-content";
 
 export const metadata: Metadata = {
   title: "Pizzellas",
@@ -21,15 +26,22 @@ export const metadata: Metadata = {
 };
 
 export default async function PizzellasPage() {
-  const molds = await fetchPizzelleMolds();
+  const [molds, content] = await Promise.all([
+    fetchPizzelleMolds(),
+    getSiteContent(),
+  ]);
 
   return (
     <>
       <section className="relative isolate overflow-hidden">
         <div className="absolute inset-0">
           <OptimizedImage
-            src={SITE_IMAGES.pages.pizzellasHero}
-            alt={SITE_IMAGES.pages.pizzellasHeroAlt}
+            src={resolveSiteContentImage(
+              content,
+              "pizzellas_hero_image_url",
+              SITE_IMAGES.pages.pizzellasHero
+            )}
+            alt={pickContent(content, "pizzellas_hero_image_alt")}
             fill
             priority
             className="object-cover"
@@ -47,9 +59,7 @@ export default async function PizzellasPage() {
               El crujido que heredás sin saber de quién viene
             </h1>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              El molde caliente, el impasto fino, el azúcar que nieva: en el
-              salón elegimos hierro y gres con peso real, para que el ritual
-              vuelva a sonar en tu cocina.
+              {pickContent(content, "pizzellas_intro")}
             </p>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <Button
