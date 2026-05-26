@@ -9,6 +9,7 @@ const LINKS = [
   { href: "/internal", label: "Inicio", exact: true },
   { href: "/internal/content", label: "Contenido", exact: false },
   { href: "/internal/media", label: "Medios", exact: false },
+  { href: "/internal/products", label: "Productos", exact: false },
 ] as const;
 
 export function InternalNav() {

@@ -12,9 +12,8 @@ export default function InternalHomePage() {
           Panel interno
         </h2>
         <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
-          Gestioná textos del sitio e imágenes en Storage sin tocar SQL. Esta es la
-          primera capa de herramientas; más adelante sumaremos productos, categorías y
-          consultas.
+          Gestioná textos del sitio, imágenes en Storage y el catálogo de productos sin
+          tocar SQL.
         </p>
       </div>
 
@@ -23,7 +22,7 @@ export default function InternalHomePage() {
         <StatusCard label="Service role (escritura)" ok={isAdminSupabaseConfigured()} />
       </dl>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <ToolCard
           href="/internal/content"
           title="Contenido del sitio"
@@ -33,6 +32,11 @@ export default function InternalHomePage() {
           href="/internal/media"
           title="Medios"
           description="Subí o eliminá imágenes en los buckets de Storage."
+        />
+        <ToolCard
+          href="/internal/products"
+          title="Productos"
+          description="CRUD del catálogo: precios, stock, descripciones e imágenes."
         />
       </div>
     </div>
