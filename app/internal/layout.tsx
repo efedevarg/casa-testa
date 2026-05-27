@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { InternalNav } from "@/components/internal/internal-nav";
+import { LogoutButton } from "@/components/internal/logout-button";
+import { requireInternalAdmin } from "@/lib/auth/internal-access";
 import { isAdminSupabaseConfigured } from "@/lib/supabase/admin";
 
 export const metadata: Metadata = {
@@ -9,11 +11,12 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function InternalLayout({
+export default async function InternalLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const user = await requireInternalAdmin();
   const adminReady = isAdminSupabaseConfigured();
 
   return (
@@ -29,12 +32,18 @@ export default function InternalLayout({
                 Herramientas internas
               </h1>
             </div>
-            <Link
-              href="/"
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-            >
-              ← Volver al sitio
-            </Link>
+            <div className="flex items-center gap-2">
+              <p className="hidden text-xs text-muted-foreground sm:block">
+                {user.email}
+              </p>
+              <Link
+                href="/"
+                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              >
+                ← Sitio
+              </Link>
+              <LogoutButton />
+            </div>
           </div>
 
           <InternalNav />

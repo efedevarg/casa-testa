@@ -9,4 +9,5 @@ export {
   updateProductImageAction,
   uploadProductImageAction,
 } from "./products";
+export { loginWithPasswordAction, logoutAction, type LoginFormState } from "./auth";
 export type { ActionResult } from "./types";

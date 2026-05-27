@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { PencilIcon, Trash2Icon } from "lucide-react";
+import { PencilIcon } from "lucide-react";
 
 import { DeleteProductButton } from "@/components/internal/delete-product-button";
 import { formatArs } from "@/lib/format";

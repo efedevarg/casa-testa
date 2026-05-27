@@ -5,5 +5,7 @@ declare namespace NodeJS {
     NEXT_PUBLIC_SUPABASE_ANON_KEY?: string;
     /** Solo servidor — inserciones admin / bypass RLS cuando haga falta */
     SUPABASE_SERVICE_ROLE_KEY?: string;
+    /** Emails permitidos para /internal (separados por coma) */
+    INTERNAL_ADMIN_EMAILS?: string;
   }
 }
