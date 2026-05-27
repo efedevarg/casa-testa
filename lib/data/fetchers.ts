@@ -25,7 +25,6 @@ import type {
   Category,
   PizzelleMold,
   Product,
-  ProductCategoryId,
   RepairService,
 } from "./domain";
 import { getDataSource } from "./source";
@@ -38,19 +37,8 @@ import {
 
 export { getDataSource, shouldUseSupabase } from "./source";
 
-const CATEGORY_ORDER: ProductCategoryId[] = [
-  "ollas",
-  "sartenes",
-  "vajilla",
-  "cocina",
-  "decoracion",
-  "pizzellas",
-];
-
 function sortCategories(categories: Category[]): Category[] {
-  return [...categories].sort(
-    (a, b) => CATEGORY_ORDER.indexOf(a.id) - CATEGORY_ORDER.indexOf(b.id)
-  );
+  return [...categories].sort((a, b) => a.title.localeCompare(b.title, "es"));
 }
 
 async function withMockFallback<T>(
@@ -93,9 +81,7 @@ function cachedCatalog<T>(
 
 async function loadCategoriesFromDb(): Promise<Category[]> {
   const rows = await queryCategories();
-  return sortCategories(
-    rows.map(transformCategory).filter((c): c is Category => c !== null)
-  );
+  return sortCategories(rows.map(transformCategory));
 }
 
 async function loadProductsFromDb(): Promise<Product[]> {

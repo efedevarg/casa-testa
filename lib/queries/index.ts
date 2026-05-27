@@ -19,3 +19,21 @@ export {
   upsertSiteContent,
   type SiteContentRow,
 } from "./site-content";
+export {
+  deleteCategoryAdmin,
+  insertCategoryAdmin,
+  queryCategoriesAdmin,
+  queryCategoryAdminById,
+  updateCategoryAdmin,
+} from "./categories-admin";
+export {
+  deletePizzellaAdmin,
+  deletePizzellaImageAdmin,
+  insertPizzellaAdmin,
+  insertPizzellaImageAdmin,
+  queryPizzellaAdminById,
+  queryPizzellasAdmin,
+  updatePizzellaAdmin,
+  updatePizzellaImageAdmin,
+} from "./pizzellas-admin";
+export { queryContactInquiriesAdmin, queryRepairInquiriesAdmin } from "./inquiries-admin";

@@ -2,13 +2,7 @@
  * Tipos de dominio de Casa Testa (UI + fetchers).
  * Independientes del origen: Supabase o mocks locales.
  */
-export type ProductCategoryId =
-  | "ollas"
-  | "sartenes"
-  | "vajilla"
-  | "cocina"
-  | "decoracion"
-  | "pizzellas";
+export type ProductCategoryId = string;
 
 export type Product = {
   id: string;
@@ -30,6 +24,7 @@ export type Product = {
 
 export type Category = {
   id: ProductCategoryId;
+  slug: string;
   title: string;
   blurb: string;
   imageSrc: string;

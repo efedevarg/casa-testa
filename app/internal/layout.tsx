@@ -22,7 +22,7 @@ export default async function InternalLayout({
   return (
     <div className="min-h-screen bg-muted/40">
       <header className="border-b border-border/60 bg-background/95 backdrop-blur-md">
-        <div className="mx-auto flex max-w-5xl flex-col gap-4 px-4 py-5 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-5 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="space-y-0.5">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
@@ -46,8 +46,6 @@ export default async function InternalLayout({
             </div>
           </div>
 
-          <InternalNav />
-
           {!adminReady ? (
             <p className="rounded-xl border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-sm text-amber-950 dark:text-amber-100">
               <strong>SUPABASE_SERVICE_ROLE_KEY</strong> no está configurada. Las
@@ -57,7 +55,12 @@ export default async function InternalLayout({
         </div>
       </header>
 
-      <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">{children}</main>
+      <div className="mx-auto grid max-w-6xl gap-6 px-4 py-8 sm:px-6 lg:grid-cols-[220px_1fr] lg:px-8">
+        <aside className="h-fit rounded-2xl border border-border/70 bg-card/90 p-3 shadow-sm">
+          <InternalNav />
+        </aside>
+        <main>{children}</main>
+      </div>
     </div>
   );
 }

@@ -38,6 +38,21 @@ export default function InternalHomePage() {
           title="Productos"
           description="CRUD del catálogo: precios, stock, descripciones e imágenes."
         />
+        <ToolCard
+          href="/internal/categories"
+          title="Categorías"
+          description="Administrá categorías, slug, destacados e imagen."
+        />
+        <ToolCard
+          href="/internal/pizzellas"
+          title="Pizzellas"
+          description="CRUD de moldes y sus imágenes de referencia."
+        />
+        <ToolCard
+          href="/internal/inquiries"
+          title="Consultas"
+          description="Lectura de mensajes de contacto y reparaciones."
+        />
       </div>
     </div>
   );

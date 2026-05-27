@@ -9,5 +9,13 @@ export {
   updateProductImageAction,
   uploadProductImageAction,
 } from "./products";
+export { deleteCategoryAction, saveCategoryAction, uploadCategoryImageAction } from "./categories";
+export {
+  deletePizzellaAction,
+  deletePizzellaImageAction,
+  savePizzellaAction,
+  updatePizzellaImageAction,
+  uploadPizzellaImageAction,
+} from "./pizzellas";
 export { loginWithPasswordAction, logoutAction, type LoginFormState } from "./auth";
 export type { ActionResult } from "./types";

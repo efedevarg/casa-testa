@@ -6,7 +6,7 @@ import { m, useReducedMotion } from "framer-motion";
 import { OptimizedImage } from "@/components/media/optimized-image";
 import { formatArs } from "@/lib/format";
 import type { Product } from "@/lib/data";
-import { PRODUCT_CATEGORY_LABEL } from "@/lib/data/labels";
+import { getCategoryLabel } from "@/lib/data/labels";
 import { cn } from "@/lib/utils";
 
 type ProductCardProps = {
@@ -44,7 +44,7 @@ export function ProductCard({ product, className }: ProductCardProps) {
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0 space-y-1">
             <p className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-primary/90">
-              {PRODUCT_CATEGORY_LABEL[product.category]}
+              {getCategoryLabel(product.category)}
             </p>
             <h3 className="font-heading text-lg font-semibold tracking-tight text-foreground sm:text-xl">
               {product.name}

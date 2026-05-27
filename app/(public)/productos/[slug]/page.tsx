@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { OptimizedImage } from "@/components/media/optimized-image";
 import { SITE, WHATSAPP_CHAT_URL } from "@/lib/constants";
 import { formatArs } from "@/lib/format";
-import { PRODUCT_CATEGORY_LABEL } from "@/lib/data/labels";
+import { getCategoryLabel } from "@/lib/data/labels";
 import { fetchProductBySlug, fetchProductSlugs } from "@/lib/data/fetchers";
 
 type PageProps = {
@@ -72,7 +72,7 @@ export default async function ProductoDetallePage({ params }: PageProps) {
           <div className="space-y-4">
             <div className="flex flex-wrap items-center gap-2">
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
-                {PRODUCT_CATEGORY_LABEL[product.category]}
+                {getCategoryLabel(product.category)}
               </p>
               <span className="rounded-full border border-border/70 bg-muted/50 px-2.5 py-0.5 text-[0.65rem] font-medium uppercase tracking-wide text-muted-foreground">
                 {product.sku}

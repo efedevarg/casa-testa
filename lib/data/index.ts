@@ -13,7 +13,7 @@ export { CACHE_TAGS, CATALOG_REVALIDATE_SECONDS } from "./cache-tags";
 export * from "./domain";
 export * from "./types";
 export * from "./transforms";
-export { PRODUCT_CATEGORY_LABEL } from "./labels";
+export { PRODUCT_CATEGORY_LABEL, STATIC_CATEGORY_LABELS, getCategoryLabel } from "./labels";
 export {
   getContentByKey,
   getSiteContent,

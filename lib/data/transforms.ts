@@ -10,46 +10,41 @@ import type {
   Category,
   PizzelleMold,
   Product,
-  ProductCategoryId,
   RepairService,
 } from "./domain";
 
-const CATEGORY_IMAGES = SITE_IMAGES.categories;
-const CATEGORY_HREFS: Record<ProductCategoryId, string> = {
-  ollas: "/productos?categoria=ollas",
-  sartenes: "/productos?categoria=sartenes",
-  vajilla: "/productos?categoria=vajilla",
-  cocina: "/productos?categoria=cocina",
-  decoracion: "/productos?categoria=decoracion",
-  pizzellas: "/pizzellas",
-};
+const CATEGORY_IMAGE_FALLBACKS = Object.values(SITE_IMAGES.categories);
 
-function isProductCategoryId(slug: string): slug is ProductCategoryId {
-  return slug in CATEGORY_IMAGES;
+function getCategoryFallbackImage(slug: string): string {
+  if (CATEGORY_IMAGE_FALLBACKS.length === 0) {
+    return SITE_IMAGES.products.castIronCocotte;
+  }
+  const chars = [...slug.toLowerCase()];
+  const hash = chars.reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  return CATEGORY_IMAGE_FALLBACKS[hash % CATEGORY_IMAGE_FALLBACKS.length];
 }
 
-export function transformCategory(row: Tables<"categories">): Category | null {
-  if (!isProductCategoryId(row.slug)) return null;
+function getCategoryHref(slug: string): string {
+  return slug === "pizzellas" ? "/pizzellas" : `/productos?categoria=${slug}`;
+}
 
-  const fallbackImage = CATEGORY_IMAGES[row.slug];
+export function transformCategory(row: Tables<"categories">): Category {
+  const fallbackImage = getCategoryFallbackImage(row.slug);
 
   return {
     id: row.slug,
+    slug: row.slug,
     title: row.name,
     blurb: row.description ?? "",
-    imageSrc: resolveImageUrl(
-      row.image_url,
-      "categories",
-      fallbackImage
-    ),
+    imageSrc: resolveImageUrl(row.image_url, "categories", fallbackImage),
     imageAlt: `${row.name} — Casa Testa`,
-    href: CATEGORY_HREFS[row.slug],
+    href: getCategoryHref(row.slug),
   };
 }
 
 export function transformProduct(row: ProductWithRelations): Product | null {
   const categorySlug = row.categories?.slug;
-  if (!categorySlug || !isProductCategoryId(categorySlug)) return null;
+  if (!categorySlug) return null;
 
   const images = [...(row.product_images ?? [])].sort(
     (a, b) => a.sort_order - b.sort_order

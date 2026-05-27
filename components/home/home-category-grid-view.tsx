@@ -7,8 +7,8 @@ import { FadeIn } from "@/components/marketing/fade-in";
 import { SectionHeader } from "@/components/marketing/section-header";
 import { OptimizedImage } from "@/components/media/optimized-image";
 import {
-  CATEGORY_IMAGE_FOCUS,
-  CATEGORY_LAYOUT,
+  getCategoryImageFocus,
+  getCategoryLayout,
   type CategoryLayoutVariant,
 } from "@/lib/constants/category-visuals";
 import type { Category } from "@/lib/data";
@@ -47,8 +47,8 @@ export function HomeCategoryGridView({
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:grid-rows-[repeat(3,minmax(0,1fr))] sm:gap-5">
           {categories.map((cat, index) => {
-            const layout = CATEGORY_LAYOUT[cat.id];
-            const focus = CATEGORY_IMAGE_FOCUS[cat.id];
+            const layout = getCategoryLayout(cat.slug);
+            const focus = getCategoryImageFocus(cat.slug);
 
             return (
               <FadeIn

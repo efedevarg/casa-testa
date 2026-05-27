@@ -12,6 +12,7 @@ import {
 } from "@/lib/supabase/storage";
 
 import type { ActionResult } from "./types";
+import { rethrowIfRedirectError } from "./redirect";
 
 const MAX_BYTES = 5 * 1024 * 1024;
 
@@ -76,6 +77,7 @@ export async function uploadSiteImage(
       },
     };
   } catch (error) {
+    rethrowIfRedirectError(error);
     console.error("[uploadSiteImage]", error);
     return { ok: false, error: "No pudimos subir la imagen." };
   }
@@ -105,6 +107,7 @@ export async function deleteSiteImage(
     revalidateTag(CACHE_TAGS.siteContent);
     return { ok: true, mode: "persisted" };
   } catch (error) {
+    rethrowIfRedirectError(error);
     console.error("[deleteSiteImage]", error);
     return { ok: false, error: "No pudimos eliminar la imagen." };
   }

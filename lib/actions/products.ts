@@ -23,6 +23,7 @@ import {
 import { slugify } from "@/lib/utils/slug";
 
 import type { ActionResult } from "./types";
+import { rethrowIfRedirectError } from "./redirect";
 
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 
@@ -150,6 +151,7 @@ export async function saveProductAction(
       data: { id: updated.id, slug: updated.slug },
     };
   } catch (error) {
+    rethrowIfRedirectError(error);
     console.error("[saveProductAction]", error);
     const message =
       error instanceof Error ? error.message : "No pudimos guardar el producto.";
@@ -181,6 +183,7 @@ export async function deleteProductAction(
     revalidateCatalog(existing.slug);
     redirect("/internal/products?deleted=1");
   } catch (error) {
+    rethrowIfRedirectError(error);
     console.error("[deleteProductAction]", error);
     return { ok: false, error: "No pudimos eliminar el producto." };
   }

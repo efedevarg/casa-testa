@@ -6,32 +6,11 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FadeIn } from "@/components/marketing/fade-in";
 import { SectionHeader } from "@/components/marketing/section-header";
 import { ProductCard } from "@/components/products/product-card";
-import type { Product, ProductCategoryId } from "@/lib/data";
-import { PRODUCT_CATEGORY_LABEL } from "@/lib/data/labels";
+import type { Product } from "@/lib/data";
+import { getCategoryLabel } from "@/lib/data/labels";
 import { cn } from "@/lib/utils";
 
 const ALL = "todos" as const;
-
-const CATEGORY_ORDER: ProductCategoryId[] = [
-  "ollas",
-  "sartenes",
-  "vajilla",
-  "cocina",
-  "decoracion",
-  "pizzellas",
-];
-
-const FILTERS: Array<{ id: ProductCategoryId | "todos"; label: string }> = [
-  { id: "todos", label: "Todos" },
-  ...CATEGORY_ORDER.map((id) => ({
-    id,
-    label: PRODUCT_CATEGORY_LABEL[id],
-  })),
-];
-
-function isCategory(value: string | null): value is ProductCategoryId {
-  return !!value && value in PRODUCT_CATEGORY_LABEL;
-}
 
 type ProductCatalogProps = {
   products: Product[];
@@ -41,19 +20,31 @@ export function ProductCatalog({ products }: ProductCatalogProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [category, setCategory] = useState<ProductCategoryId | "todos">(ALL);
+  const categoryFilters = useMemo(() => {
+    const unique = Array.from(new Set(products.map((p) => p.category)));
+    unique.sort((a, b) => getCategoryLabel(a).localeCompare(getCategoryLabel(b), "es"));
+    return [
+      { id: ALL, label: "Todos" },
+      ...unique.map((id) => ({ id, label: getCategoryLabel(id) })),
+    ] as Array<{ id: string; label: string }>;
+  }, [products]);
+  const validCategories = useMemo(
+    () => new Set(categoryFilters.filter((f) => f.id !== ALL).map((f) => f.id)),
+    [categoryFilters]
+  );
+  const [category, setCategory] = useState<string>(ALL);
 
   useEffect(() => {
     const param = searchParams.get("categoria");
-    setCategory(isCategory(param) ? param : ALL);
-  }, [searchParams]);
+    setCategory(param && validCategories.has(param) ? param : ALL);
+  }, [searchParams, validCategories]);
 
   const filtered = useMemo(() => {
     if (category === ALL) return products;
     return products.filter((p) => p.category === category);
   }, [category, products]);
 
-  const setFilter = (next: ProductCategoryId | "todos") => {
+  const setFilter = (next: string) => {
     setCategory(next);
     const params = new URLSearchParams(searchParams.toString());
     if (next === ALL) params.delete("categoria");
@@ -74,7 +65,7 @@ export function ProductCatalog({ products }: ProductCatalogProps) {
 
       <FadeIn delay={0.05}>
         <div className="flex flex-wrap gap-2">
-          {FILTERS.map((item) => {
+          {categoryFilters.map((item) => {
             const active = category === item.id;
             return (
               <button

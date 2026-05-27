@@ -11,6 +11,7 @@ import { isAdminSupabaseConfigured } from "@/lib/supabase/admin";
 import { upsertSiteContent } from "@/lib/queries/site-content";
 
 import type { ActionResult } from "./types";
+import { rethrowIfRedirectError } from "./redirect";
 
 function isSiteContentKey(key: string): key is SiteContentKey {
   return key in SITE_CONTENT_DEFAULTS;
@@ -44,6 +45,7 @@ export async function updateSiteContent(
     revalidateTag(CACHE_TAGS.siteContent);
     return { ok: true, mode: "persisted", data: { key: trimmedKey } };
   } catch (error) {
+    rethrowIfRedirectError(error);
     console.error("[updateSiteContent]", error);
     return {
       ok: false,

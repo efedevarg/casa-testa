@@ -6,6 +6,7 @@ const { categories: C } = SITE_IMAGES;
 export const MOCK_CATEGORIES: MockCategory[] = [
   {
     id: "ollas",
+    slug: "ollas",
     title: "Ollas",
     blurb: "Guisos lentos, hierro honesto.",
     imageSrc: C.ollas,
@@ -14,6 +15,7 @@ export const MOCK_CATEGORIES: MockCategory[] = [
   },
   {
     id: "sartenes",
+    slug: "sartenes",
     title: "Sartenes",
     blurb: "Sellado limpio, calor parejo.",
     imageSrc: C.sartenes,
@@ -22,6 +24,7 @@ export const MOCK_CATEGORIES: MockCategory[] = [
   },
   {
     id: "vajilla",
+    slug: "vajilla",
     title: "Vajilla",
     blurb: "Mesa cálida, tacto sedoso.",
     imageSrc: C.vajilla,
@@ -30,6 +33,7 @@ export const MOCK_CATEGORIES: MockCategory[] = [
   },
   {
     id: "cocina",
+    slug: "cocina",
     title: "Cocina",
     blurb: "Utensilios para el ritual diario.",
     imageSrc: C.cocina,
@@ -38,6 +42,7 @@ export const MOCK_CATEGORIES: MockCategory[] = [
   },
   {
     id: "decoracion",
+    slug: "decoracion",
     title: "Decoración",
     blurb: "Detalles con carácter italiano.",
     imageSrc: C.decoracion,
@@ -46,6 +51,7 @@ export const MOCK_CATEGORIES: MockCategory[] = [
   },
   {
     id: "pizzellas",
+    slug: "pizzellas",
     title: "Pizzellas",
     blurb: "Crujido de tradición familiar.",
     imageSrc: C.pizzellas,
