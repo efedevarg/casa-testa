@@ -7,6 +7,7 @@ export type CategoryUpsertInput = {
   description: string | null;
   featured: boolean;
   image_url: string | null;
+  sort_order: number;
 };
 
 function getAdmin() {
@@ -18,12 +19,18 @@ function getAdmin() {
 
 export async function queryCategoriesAdmin(): Promise<Tables<"categories">[]> {
   const supabase = getAdmin();
-  const { data, error } = await supabase
+  const ordered = await supabase
     .from("categories")
     .select("*")
+    .order("sort_order", { ascending: true })
     .order("created_at", { ascending: false });
-  if (error) throw new Error(`[categoriesAdmin.list] ${error.message}`);
-  return data;
+  if (!ordered.error) return ordered.data;
+  if (!ordered.error.message.includes("sort_order")) {
+    throw new Error(`[categoriesAdmin.list] ${ordered.error.message}`);
+  }
+  const legacy = await supabase.from("categories").select("*").order("created_at", { ascending: false });
+  if (legacy.error) throw new Error(`[categoriesAdmin.list.legacyOrder] ${legacy.error.message}`);
+  return legacy.data;
 }
 
 export async function queryCategoryAdminById(

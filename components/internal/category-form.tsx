@@ -59,6 +59,18 @@ export function CategoryForm({ category, showSavedBanner }: Props) {
         <span className="font-medium">image_url (path/URL)</span>
         <input name="image_url" defaultValue={category?.image_url ?? ""} className={`${inputClass} font-mono`} />
       </label>
+      <label className="block space-y-2 text-sm">
+        <span className="font-medium">Orden</span>
+        <input
+          name="sort_order"
+          type="number"
+          min={0}
+          step={1}
+          required
+          defaultValue={category?.sort_order ?? 0}
+          className={inputClass}
+        />
+      </label>
       <label className="flex items-center gap-2 text-sm">
         <input type="checkbox" name="featured" defaultChecked={category?.featured} />
         <span className="font-medium">Destacada</span>

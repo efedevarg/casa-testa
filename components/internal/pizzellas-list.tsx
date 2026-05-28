@@ -46,7 +46,14 @@ export function PizzellasList({ molds }: Props) {
             </tr>
           </thead>
           <tbody>
-            {filtered.map((mold) => (
+            {filtered.length === 0 ? (
+              <tr>
+                <td colSpan={7} className="px-4 py-8 text-center text-muted-foreground">
+                  No hay moldes para mostrar.
+                </td>
+              </tr>
+            ) : (
+              filtered.map((mold) => (
               <tr key={mold.id} className="border-b border-border/40 last:border-0 hover:bg-muted/20">
                 <td className="px-4 py-3">{mold.model_name}</td>
                 <td className="px-4 py-3 font-mono text-xs">{mold.slug}</td>
@@ -68,7 +75,8 @@ export function PizzellasList({ molds }: Props) {
                   </div>
                 </td>
               </tr>
-            ))}
+              ))
+            )}
           </tbody>
         </table>
       </div>

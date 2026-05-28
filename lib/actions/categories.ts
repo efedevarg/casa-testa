@@ -34,11 +34,15 @@ function parseCategoryForm(formData: FormData): CategoryUpsertInput | { error: s
   const descRaw = String(formData.get("description") ?? "").trim();
   const featured = formData.get("featured") === "on";
   const imageRaw = String(formData.get("image_url") ?? "").trim();
+  const sortOrderRaw = Number(formData.get("sort_order") ?? 0);
 
   if (!name) return { error: "El nombre es obligatorio." };
   if (!slug) slug = slugify(name);
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
     return { error: "Slug inválido. Usá minúsculas, números y guiones." };
+  }
+  if (!Number.isFinite(sortOrderRaw) || sortOrderRaw < 0 || !Number.isInteger(sortOrderRaw)) {
+    return { error: "Orden inválido (entero ≥ 0)." };
   }
 
   return {
@@ -47,6 +51,7 @@ function parseCategoryForm(formData: FormData): CategoryUpsertInput | { error: s
     description: descRaw || null,
     featured,
     image_url: imageRaw || null,
+    sort_order: sortOrderRaw,
   };
 }
 
@@ -142,6 +147,7 @@ export async function uploadCategoryImageAction(
       description: category.description,
       featured: category.featured,
       image_url: uploaded.path,
+      sort_order: category.sort_order,
     });
     revalidateCategories(category.slug);
     revalidatePath(`/internal/categories/${categoryId}`);

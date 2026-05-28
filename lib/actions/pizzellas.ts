@@ -113,7 +113,9 @@ export async function deletePizzellaAction(moldId: string): Promise<ActionResult
   }
 }
 
-export type UploadPizzellaImageState = ActionResult<{ path: string; imageId: string }>;
+export type UploadPizzellaImageState = ActionResult<{
+  images: Array<{ path: string; imageId: string }>;
+}>;
 
 export async function uploadPizzellaImageAction(
   _prev: UploadPizzellaImageState | undefined,
@@ -122,34 +124,38 @@ export async function uploadPizzellaImageAction(
   if (!isAdminSupabaseConfigured()) return { ok: false, error: "Service role no configurada." };
   const moldId = String(formData.get("mold_id") ?? "").trim();
   const altText = String(formData.get("alt_text") ?? "").trim();
-  let path = String(formData.get("path") ?? "").trim();
-  const file = formData.get("file");
+  const path = String(formData.get("path") ?? "").trim();
+  const files = formData.getAll("file").filter((item): item is File => item instanceof File);
   if (!moldId) return { ok: false, error: "Molde inválido." };
-  if (!(file instanceof File) || file.size === 0) return { ok: false, error: "Seleccioná una imagen." };
+  if (files.length === 0) return { ok: false, error: "Seleccioná una imagen." };
 
   try {
     const mold = await queryPizzellaAdminById(moldId);
     if (!mold) return { ok: false, error: "Molde no encontrado." };
-    if (!path) {
-      const safe = file.name.toLowerCase().replace(/[^a-z0-9.-]+/g, "-");
-      path = `${mold.slug}/${safe || "imagen.jpg"}`;
+    const uploadedImages: Array<{ path: string; imageId: string }> = [];
+    for (let index = 0; index < files.length; index += 1) {
+      const file = files[index];
+      const filePath =
+        path ||
+        `${mold.slug}/${file.name.toLowerCase().replace(/[^a-z0-9.-]+/g, "-") || `imagen-${index + 1}.jpg`}`;
+      if (!validateImagePath("pizzellas", filePath)) return { ok: false, error: "Path inválido." };
+      const uploaded = await uploadImage({
+        bucket: "pizzellas",
+        path: filePath,
+        body: await file.arrayBuffer(),
+        contentType: file.type || "image/jpeg",
+        upsert: true,
+      });
+      const row = await insertPizzellaImageAdmin({
+        mold_id: moldId,
+        image_url: uploaded.path,
+        alt_text: altText || mold.model_name,
+      });
+      uploadedImages.push({ path: uploaded.path, imageId: row.id });
     }
-    if (!validateImagePath("pizzellas", path)) return { ok: false, error: "Path inválido." };
-    const uploaded = await uploadImage({
-      bucket: "pizzellas",
-      path,
-      body: await file.arrayBuffer(),
-      contentType: file.type || "image/jpeg",
-      upsert: true,
-    });
-    const row = await insertPizzellaImageAdmin({
-      mold_id: moldId,
-      image_url: uploaded.path,
-      alt_text: altText || mold.model_name,
-    });
     revalidatePizzellas();
     revalidatePath(`/internal/pizzellas/${moldId}`);
-    return { ok: true, mode: "persisted", data: { path: uploaded.path, imageId: row.id } };
+    return { ok: true, mode: "persisted", data: { images: uploadedImages } };
   } catch (error) {
     rethrowIfRedirectError(error);
     const message = error instanceof Error ? error.message : "No pudimos subir imagen.";

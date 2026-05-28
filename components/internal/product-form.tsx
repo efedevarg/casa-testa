@@ -146,6 +146,20 @@ export function ProductForm({ categories, product, showSavedBanner }: ProductFor
           />
         </label>
 
+        <label className="space-y-2 text-sm">
+          <span className="font-medium text-foreground">Orden</span>
+          <input
+            name="sort_order"
+            type="number"
+            min={0}
+            step={1}
+            required
+            defaultValue={product?.sort_order ?? 0}
+            disabled={pending}
+            className={inputClass}
+          />
+        </label>
+
         <label className="flex items-center gap-2 self-end text-sm">
           <input
             type="checkbox"

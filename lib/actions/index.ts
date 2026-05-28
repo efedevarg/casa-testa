@@ -6,6 +6,7 @@ export {
   deleteProductAction,
   deleteProductImageAction,
   saveProductAction,
+  setProductPrimaryImageAction,
   updateProductImageAction,
   uploadProductImageAction,
 } from "./products";
@@ -17,5 +18,6 @@ export {
   updatePizzellaImageAction,
   uploadPizzellaImageAction,
 } from "./pizzellas";
+export { updateInquiryStatusAction, type InquiryStatus } from "./inquiries";
 export { loginWithPasswordAction, logoutAction, type LoginFormState } from "./auth";
 export type { ActionResult } from "./types";

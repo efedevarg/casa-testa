@@ -39,17 +39,26 @@ export function CategoriesList({ categories }: Props) {
               <th className="px-4 py-3">Slug</th>
               <th className="px-4 py-3">Destacada</th>
               <th className="px-4 py-3">Imagen</th>
+              <th className="px-4 py-3">Orden</th>
               <th className="px-4 py-3">Creación</th>
               <th className="px-4 py-3 text-right">Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {filtered.map((cat) => (
+            {filtered.length === 0 ? (
+              <tr>
+                <td colSpan={7} className="px-4 py-8 text-center text-muted-foreground">
+                  No hay categorías para mostrar.
+                </td>
+              </tr>
+            ) : (
+              filtered.map((cat) => (
               <tr key={cat.id} className="border-b border-border/40 last:border-0 hover:bg-muted/20">
                 <td className="px-4 py-3">{cat.name}</td>
                 <td className="px-4 py-3 font-mono text-xs">{cat.slug}</td>
                 <td className="px-4 py-3">{cat.featured ? "Sí" : "No"}</td>
                 <td className="px-4 py-3">{cat.image_url ? "Sí" : "—"}</td>
+                <td className="px-4 py-3">{cat.sort_order}</td>
                 <td className="px-4 py-3 text-muted-foreground">
                   {new Date(cat.created_at).toLocaleDateString("es-AR")}
                 </td>
@@ -65,7 +74,8 @@ export function CategoriesList({ categories }: Props) {
                   </div>
                 </td>
               </tr>
-            ))}
+              ))
+            )}
           </tbody>
         </table>
       </div>

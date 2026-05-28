@@ -44,8 +44,19 @@ export default async function ProductoDetallePage({ params }: PageProps) {
   const product = await fetchProductBySlug(slug);
   if (!product) notFound();
 
+  const productUrl = absoluteUrl(`/productos/${product.slug}`);
+  const categoryLabel = getCategoryLabel(product.category);
   const waText = encodeURIComponent(
-    `Hola Casa Testa, me interesa ${product.name} (${product.sku}). ¿Me comparten disponibilidad?`
+    [
+      "Hola Casa Testa, me interesa este producto:",
+      `Producto: ${product.name}`,
+      `SKU: ${product.sku}`,
+      `Categoría: ${categoryLabel}`,
+      `Precio: ${formatArs(product.price)}`,
+      `URL: ${productUrl}`,
+      "",
+      "¿Me comparten disponibilidad?",
+    ].join("\n")
   );
 
   return (

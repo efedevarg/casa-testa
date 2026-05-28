@@ -8,6 +8,7 @@ import { CopyButton } from "@/components/internal/copy-button";
 import { StatusMessage } from "@/components/internal/status-message";
 import {
   deleteProductImageAction,
+  setProductPrimaryImageAction,
   updateProductImageAction,
   uploadProductImageAction,
 } from "@/lib/actions/products";
@@ -65,6 +66,10 @@ function ProductImageRow({
     setDeleting(false);
   }
 
+  async function handleSetPrimary() {
+    await setProductPrimaryImageAction(image.id, productId);
+  }
+
   return (
     <article className="rounded-xl border border-border/60 bg-muted/20 p-4">
       <div className="grid gap-4 sm:grid-cols-[120px_1fr]">
@@ -80,6 +85,11 @@ function ProductImageRow({
         </div>
 
         <div className="space-y-3">
+          {image.sort_order === 0 ? (
+            <span className="inline-flex rounded-full bg-primary/15 px-2 py-0.5 text-xs font-medium text-primary">
+              Principal
+            </span>
+          ) : null}
           <p className="break-all font-mono text-xs text-muted-foreground">{image.image_url}</p>
           <CopyButton value={image.image_url} label="Copiar path" />
 
@@ -112,6 +122,16 @@ function ProductImageRow({
             </label>
 
             <div className="flex items-end gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                disabled={deleting || updatePending || image.sort_order === 0}
+                onClick={handleSetPrimary}
+                className="rounded-full"
+              >
+                Definir principal
+              </Button>
               <Button type="submit" size="sm" disabled={updatePending} className="rounded-full">
                 {updatePending ? "Guardando…" : "Actualizar"}
               </Button>
@@ -175,6 +195,7 @@ export function ProductImagesPanel({ product }: ProductImagesPanelProps) {
             name="file"
             type="file"
             accept="image/jpeg,image/png,image/webp,image/avif"
+            multiple
             required
             disabled={uploadPending}
             className="w-full text-sm file:mr-3 file:rounded-full file:border-0 file:bg-primary file:px-4 file:py-2 file:text-sm file:font-medium file:text-primary-foreground"
@@ -221,11 +242,17 @@ export function ProductImagesPanel({ product }: ProductImagesPanelProps) {
 
         {uploadState?.ok && uploadState.data ? (
           <div className="space-y-2 sm:col-span-2">
-            <StatusMessage variant="success">Imagen subida y asociada al producto.</StatusMessage>
-            <p className="font-mono text-xs break-all text-muted-foreground">
-              {uploadState.data.path}
-            </p>
-            <CopyButton value={uploadState.data.path} label="Copiar path" />
+            <StatusMessage variant="success">
+              {uploadState.data.images.length} imagen(es) subida(s) y asociadas al producto.
+            </StatusMessage>
+            <div className="space-y-1">
+              {uploadState.data.images.map((img) => (
+                <div key={img.imageId} className="flex flex-wrap items-center gap-2">
+                  <p className="font-mono text-xs break-all text-muted-foreground">{img.path}</p>
+                  <CopyButton value={img.path} label="Copiar" />
+                </div>
+              ))}
+            </div>
           </div>
         ) : null}
 

@@ -44,6 +44,7 @@ function parseProductForm(formData: FormData): ProductUpsertInput | { error: str
   const sku = String(formData.get("sku") ?? "").trim();
   const category_id = String(formData.get("category_id") ?? "").trim();
   const featured = formData.get("featured") === "on";
+  const sortOrderRaw = Number(formData.get("sort_order") ?? 0);
 
   const priceRaw = Number(formData.get("price"));
   const compareRaw = String(formData.get("compare_at_price") ?? "").trim();
@@ -81,6 +82,9 @@ function parseProductForm(formData: FormData): ProductUpsertInput | { error: str
   if (!Number.isFinite(stockRaw) || stockRaw < 0 || !Number.isInteger(stockRaw)) {
     return { error: "Stock inválido (número entero ≥ 0)." };
   }
+  if (!Number.isFinite(sortOrderRaw) || sortOrderRaw < 0 || !Number.isInteger(sortOrderRaw)) {
+    return { error: "Orden inválido (entero ≥ 0)." };
+  }
 
   let compare_at_price: number | null = null;
   if (compareRaw) {
@@ -102,6 +106,7 @@ function parseProductForm(formData: FormData): ProductUpsertInput | { error: str
     stock: stockRaw,
     featured,
     category_id,
+    sort_order: sortOrderRaw,
   };
 }
 
@@ -190,9 +195,7 @@ export async function deleteProductAction(
 }
 
 export type UploadProductImageState = ActionResult<{
-  imageId: string;
-  path: string;
-  publicUrl: string;
+  images: Array<{ imageId: string; path: string; publicUrl: string }>;
 }>;
 
 export async function uploadProductImageAction(
@@ -206,19 +209,15 @@ export async function uploadProductImageAction(
   const productId = String(formData.get("product_id") ?? "").trim();
   const alt_text = String(formData.get("alt_text") ?? "").trim();
   const sort_order = Number(formData.get("sort_order") ?? 0);
-  let path = String(formData.get("path") ?? "").trim();
-  const file = formData.get("file");
+  const path = String(formData.get("path") ?? "").trim();
+  const files = formData.getAll("file").filter((item): item is File => item instanceof File);
 
   if (!productId) {
     return { ok: false, error: "Producto inválido." };
   }
 
-  if (!(file instanceof File) || file.size === 0) {
+  if (files.length === 0) {
     return { ok: false, error: "Seleccioná una imagen." };
-  }
-
-  if (file.size > MAX_IMAGE_BYTES) {
-    return { ok: false, error: "La imagen no puede superar 5 MB." };
   }
 
   try {
@@ -227,33 +226,45 @@ export async function uploadProductImageAction(
       return { ok: false, error: "Producto no encontrado." };
     }
 
-    if (!path) {
-      const safeName = file.name
-        .toLowerCase()
-        .replace(/[^a-z0-9.-]+/g, "-")
-        .replace(/^-|-$/g, "");
-      path = `${product.slug}/${safeName || "imagen.jpg"}`;
+    const uploadedImages: Array<{ imageId: string; path: string; publicUrl: string }> = [];
+    for (let index = 0; index < files.length; index += 1) {
+      const file = files[index];
+      if (file.size > MAX_IMAGE_BYTES) {
+        return { ok: false, error: `La imagen "${file.name}" supera 5 MB.` };
+      }
+
+      const filePath =
+        path ||
+        `${product.slug}/${file.name
+          .toLowerCase()
+          .replace(/[^a-z0-9.-]+/g, "-")
+          .replace(/^-|-$/g, "") || `imagen-${index + 1}.jpg`}`;
+
+      if (!validateImagePath("products", filePath)) {
+        return { ok: false, error: `Path inválido para "${file.name}".` };
+      }
+
+      const uploaded = await uploadImage({
+        bucket: "products",
+        path: filePath,
+        body: await file.arrayBuffer(),
+        contentType: file.type || "image/jpeg",
+        upsert: true,
+      });
+
+      const row = await insertProductImageAdmin({
+        product_id: productId,
+        image_url: uploaded.path,
+        alt_text: alt_text || product.name,
+        sort_order: (Number.isFinite(sort_order) ? sort_order : 0) + index,
+      });
+
+      uploadedImages.push({
+        imageId: row.id,
+        path: uploaded.path,
+        publicUrl: uploaded.publicUrl,
+      });
     }
-
-    if (!validateImagePath("products", path)) {
-      return { ok: false, error: "Path de imagen inválido." };
-    }
-
-    const buffer = await file.arrayBuffer();
-    const uploaded = await uploadImage({
-      bucket: "products",
-      path,
-      body: buffer,
-      contentType: file.type || "image/jpeg",
-      upsert: true,
-    });
-
-    const row = await insertProductImageAdmin({
-      product_id: productId,
-      image_url: uploaded.path,
-      alt_text: alt_text || product.name,
-      sort_order: Number.isFinite(sort_order) ? sort_order : 0,
-    });
 
     revalidateCatalog(product.slug);
     revalidatePath(`/internal/products/${productId}`);
@@ -262,9 +273,7 @@ export async function uploadProductImageAction(
       ok: true,
       mode: "persisted",
       data: {
-        imageId: row.id,
-        path: uploaded.path,
-        publicUrl: uploaded.publicUrl,
+        images: uploadedImages,
       },
     };
   } catch (error) {
@@ -318,6 +327,32 @@ export async function updateProductImageAction(
   } catch (error) {
     console.error("[updateProductImageAction]", error);
     return { ok: false, error: "No pudimos actualizar la imagen." };
+  }
+}
+
+export async function setProductPrimaryImageAction(
+  imageId: string,
+  productId: string
+): Promise<ActionResult> {
+  if (!isAdminSupabaseConfigured()) {
+    return { ok: false, error: "Service role no configurada." };
+  }
+  try {
+    const product = await queryProductAdminById(productId);
+    if (!product) return { ok: false, error: "Producto no encontrado." };
+    const images = [...(product.product_images ?? [])].sort((a, b) => a.sort_order - b.sort_order);
+    const target = images.find((img) => img.id === imageId);
+    if (!target) return { ok: false, error: "Imagen no encontrada." };
+    const reordered = [target, ...images.filter((img) => img.id !== imageId)];
+    for (let idx = 0; idx < reordered.length; idx += 1) {
+      await updateProductImageAdmin(reordered[idx].id, { sort_order: idx });
+    }
+    revalidateCatalog(product.slug);
+    revalidatePath(`/internal/products/${productId}`);
+    return { ok: true, mode: "persisted" };
+  } catch (error) {
+    rethrowIfRedirectError(error);
+    return { ok: false, error: "No pudimos definir imagen principal." };
   }
 }
 

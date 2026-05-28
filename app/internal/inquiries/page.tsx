@@ -1,11 +1,12 @@
 import Link from "next/link";
 
+import { InquiryStatusSelect } from "@/components/internal/inquiry-status-select";
 import { StatusMessage } from "@/components/internal/status-message";
 import { queryContactInquiriesAdmin, queryRepairInquiriesAdmin } from "@/lib/queries/inquiries-admin";
 import { isAdminSupabaseConfigured } from "@/lib/supabase/admin";
 
 type Props = {
-  searchParams: Promise<{ type?: "all" | "contact" | "repair" }>;
+  searchParams: Promise<{ type?: "all" | "contact" | "repair"; status?: "all" | "nueva" | "respondida" | "archivada" }>;
 };
 
 function formatDate(value: string) {
@@ -19,7 +20,7 @@ function formatDate(value: string) {
 }
 
 export default async function InternalInquiriesPage({ searchParams }: Props) {
-  const { type = "all" } = await searchParams;
+  const { type = "all", status = "all" } = await searchParams;
   const adminReady = isAdminSupabaseConfigured();
   let loadError: string | null = null;
   let contacts: Awaited<ReturnType<typeof queryContactInquiriesAdmin>> = [];
@@ -63,6 +64,22 @@ export default async function InternalInquiriesPage({ searchParams }: Props) {
           </Link>
         ))}
       </div>
+      <div className="flex flex-wrap gap-2">
+        {[
+          { id: "all", label: "Todos los estados" },
+          { id: "nueva", label: "Nuevas" },
+          { id: "respondida", label: "Respondidas" },
+          { id: "archivada", label: "Archivadas" },
+        ].map((tab) => (
+          <Link
+            key={tab.id}
+            href={`/internal/inquiries?type=${type}&status=${tab.id}`}
+            className={`rounded-full px-3 py-1.5 text-sm ${status === tab.id ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:text-foreground"}`}
+          >
+            {tab.label}
+          </Link>
+        ))}
+      </div>
 
       {!adminReady ? <StatusMessage variant="error">Service role no configurada.</StatusMessage> : null}
       {loadError ? <StatusMessage variant="error">{loadError}</StatusMessage> : null}
@@ -79,20 +96,26 @@ export default async function InternalInquiriesPage({ searchParams }: Props) {
                   <th className="px-4 py-3">Teléfono</th>
                   <th className="px-4 py-3">Mensaje</th>
                   <th className="px-4 py-3">Fecha</th>
+                  <th className="px-4 py-3">Estado</th>
                 </tr>
               </thead>
               <tbody>
-                {contacts.map((item) => (
+                {contacts
+                  .filter((item) => (status === "all" ? true : item.status === status))
+                  .map((item) => (
                   <tr key={item.id} className="border-b border-border/40 last:border-0">
                     <td className="px-4 py-3">{item.name}</td>
                     <td className="px-4 py-3">{item.email}</td>
-                    <td className="px-4 py-3 text-muted-foreground">—</td>
+                    <td className="px-4 py-3 text-muted-foreground">{item.phone ?? "—"}</td>
                     <td className="px-4 py-3">{item.message}</td>
                     <td className="px-4 py-3 whitespace-nowrap text-muted-foreground">{formatDate(item.created_at)}</td>
+                    <td className="px-4 py-3">
+                      <InquiryStatusSelect kind="contact" inquiryId={item.id} current={item.status} />
+                    </td>
                   </tr>
                 ))}
                 {contacts.length === 0 ? (
-                  <tr><td className="px-4 py-8 text-center text-muted-foreground" colSpan={5}>Sin consultas de contacto.</td></tr>
+                  <tr><td className="px-4 py-8 text-center text-muted-foreground" colSpan={6}>Sin consultas de contacto.</td></tr>
                 ) : null}
               </tbody>
             </table>
@@ -112,23 +135,29 @@ export default async function InternalInquiriesPage({ searchParams }: Props) {
                   <th className="px-4 py-3">Teléfono</th>
                   <th className="px-4 py-3">Mensaje</th>
                   <th className="px-4 py-3">Fecha</th>
+                  <th className="px-4 py-3">Estado</th>
                 </tr>
               </thead>
               <tbody>
-                {repairs.map((item) => (
+                {repairs
+                  .filter((item) => (status === "all" ? true : item.status === status))
+                  .map((item) => (
                   <tr key={item.id} className="border-b border-border/40 last:border-0">
                     <td className="px-4 py-3">{item.name}</td>
                     <td className="px-4 py-3">{item.email}</td>
-                    <td className="px-4 py-3 text-muted-foreground">—</td>
+                    <td className="px-4 py-3 text-muted-foreground">{item.phone ?? "—"}</td>
                     <td className="px-4 py-3">
                       <p>{item.message}</p>
                       <p className="mt-1 text-xs text-muted-foreground">Pieza: {item.piece_description}</p>
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap text-muted-foreground">{formatDate(item.created_at)}</td>
+                    <td className="px-4 py-3">
+                      <InquiryStatusSelect kind="repair" inquiryId={item.id} current={item.status} />
+                    </td>
                   </tr>
                 ))}
                 {repairs.length === 0 ? (
-                  <tr><td className="px-4 py-8 text-center text-muted-foreground" colSpan={5}>Sin consultas de reparación.</td></tr>
+                  <tr><td className="px-4 py-8 text-center text-muted-foreground" colSpan={6}>Sin consultas de reparación.</td></tr>
                 ) : null}
               </tbody>
             </table>

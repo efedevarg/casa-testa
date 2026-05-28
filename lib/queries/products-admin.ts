@@ -25,6 +25,7 @@ export type ProductUpsertInput = {
   stock: number;
   featured: boolean;
   category_id: string;
+  sort_order: number;
 };
 
 export type ProductImageInput = {
@@ -43,13 +44,21 @@ function getAdmin() {
 
 export async function queryProductsAdmin(): Promise<ProductAdminListItem[]> {
   const supabase = getAdmin();
-  const { data, error } = await supabase
+  const ordered = await supabase
+    .from("products")
+    .select("*, categories ( id, slug, name )")
+    .order("sort_order", { ascending: true })
+    .order("created_at", { ascending: false });
+  if (!ordered.error) return ordered.data as ProductAdminListItem[];
+  if (!ordered.error.message.includes("sort_order")) {
+    throw new Error(`[productsAdmin.list] ${ordered.error.message}`);
+  }
+  const legacy = await supabase
     .from("products")
     .select("*, categories ( id, slug, name )")
     .order("created_at", { ascending: false });
-
-  if (error) throw new Error(`[productsAdmin.list] ${error.message}`);
-  return data as ProductAdminListItem[];
+  if (legacy.error) throw new Error(`[productsAdmin.list.legacyOrder] ${legacy.error.message}`);
+  return legacy.data as ProductAdminListItem[];
 }
 
 export async function queryProductAdminById(

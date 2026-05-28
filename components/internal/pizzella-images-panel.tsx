@@ -97,9 +97,13 @@ export function PizzellaImagesPanel({ mold }: { mold: PizzellaMoldWithImages }) 
         <input type="hidden" name="mold_id" value={mold.id} />
         <input name="path" placeholder={`${mold.slug}/portada.jpg`} className={`${inputClass} font-mono`} />
         <input name="alt_text" defaultValue={mold.model_name} className={inputClass} />
-        <input name="file" type="file" accept="image/jpeg,image/png,image/webp,image/avif" required />
+        <input name="file" type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple required />
         {uploadState && !uploadState.ok ? <StatusMessage variant="error">{uploadState.error}</StatusMessage> : null}
-        {uploadState?.ok ? <StatusMessage variant="success">Imagen subida.</StatusMessage> : null}
+        {uploadState?.ok ? (
+          <StatusMessage variant="success">
+            {uploadState.data?.images.length ?? 0} imagen(es) subida(s).
+          </StatusMessage>
+        ) : null}
         <Button type="submit" disabled={uploadPending} className="w-fit rounded-full">
           {uploadPending ? "Subiendo…" : "Subir imagen"}
         </Button>

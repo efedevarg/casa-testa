@@ -17,6 +17,7 @@ export type Database = {
           description: string | null;
           image_url: string | null;
           featured: boolean;
+          sort_order: number;
           created_at: string;
         };
         Insert: {
@@ -26,6 +27,7 @@ export type Database = {
           description?: string | null;
           image_url?: string | null;
           featured?: boolean;
+          sort_order?: number;
           created_at?: string;
         };
         Update: {
@@ -35,6 +37,7 @@ export type Database = {
           description?: string | null;
           image_url?: string | null;
           featured?: boolean;
+          sort_order?: number;
           created_at?: string;
         };
         Relationships: [];
@@ -52,6 +55,7 @@ export type Database = {
           stock: number;
           featured: boolean;
           category_id: string;
+          sort_order: number;
           created_at: string;
         };
         Insert: {
@@ -66,6 +70,7 @@ export type Database = {
           stock?: number;
           featured?: boolean;
           category_id: string;
+          sort_order?: number;
           created_at?: string;
         };
         Update: {
@@ -80,6 +85,7 @@ export type Database = {
           stock?: number;
           featured?: boolean;
           category_id?: string;
+          sort_order?: number;
           created_at?: string;
         };
         Relationships: [
@@ -218,24 +224,30 @@ export type Database = {
           id: string;
           name: string;
           email: string;
+          phone: string | null;
           topic: string;
           message: string;
+          status: "nueva" | "respondida" | "archivada";
           created_at: string;
         };
         Insert: {
           id?: string;
           name: string;
           email: string;
+          phone?: string | null;
           topic: string;
           message: string;
+          status?: "nueva" | "respondida" | "archivada";
           created_at?: string;
         };
         Update: {
           id?: string;
           name?: string;
           email?: string;
+          phone?: string | null;
           topic?: string;
           message?: string;
+          status?: "nueva" | "respondida" | "archivada";
           created_at?: string;
         };
         Relationships: [];
@@ -269,24 +281,30 @@ export type Database = {
           id: string;
           name: string;
           email: string;
+          phone: string | null;
           piece_description: string;
           message: string;
+          status: "nueva" | "respondida" | "archivada";
           created_at: string;
         };
         Insert: {
           id?: string;
           name: string;
           email: string;
+          phone?: string | null;
           piece_description: string;
           message: string;
+          status?: "nueva" | "respondida" | "archivada";
           created_at?: string;
         };
         Update: {
           id?: string;
           name?: string;
           email?: string;
+          phone?: string | null;
           piece_description?: string;
           message?: string;
+          status?: "nueva" | "respondida" | "archivada";
           created_at?: string;
         };
         Relationships: [];
