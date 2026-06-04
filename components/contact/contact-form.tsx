@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 
+import { InquirySuccessTracker } from "@/components/analytics/inquiry-success-tracker";
 import { submitContactInquiry } from "@/lib/actions/contact";
 import { FadeIn } from "@/components/marketing/fade-in";
 import { Button } from "@/components/ui/button";
@@ -45,6 +46,19 @@ export function ContactForm() {
               className="w-full rounded-xl border border-input bg-background px-3 py-2.5 text-sm outline-none transition-shadow focus-visible:border-ring focus-visible:ring-4 focus-visible:ring-ring/40 disabled:opacity-60"
             />
           </label>
+          <label className="space-y-2 text-sm sm:col-span-2">
+            <span className="font-medium text-foreground">
+              Teléfono <span className="font-normal text-muted-foreground">(opcional)</span>
+            </span>
+            <input
+              name="phone"
+              type="tel"
+              autoComplete="tel"
+              disabled={pending}
+              placeholder="+54 11 …"
+              className="w-full rounded-xl border border-input bg-background px-3 py-2.5 text-sm outline-none transition-shadow focus-visible:border-ring focus-visible:ring-4 focus-visible:ring-ring/40 disabled:opacity-60"
+            />
+          </label>
         </div>
 
         <label className="block space-y-2 text-sm">
@@ -78,11 +92,14 @@ export function ContactForm() {
         ) : null}
 
         {state?.ok ? (
-          <p className="text-sm font-medium text-primary">
-            {state.mode === "persisted"
-              ? "Mensaje recibido. Te contactamos pronto desde Casa Testa."
-              : "Gracias — el mensaje se registró en modo demo (Supabase no configurado)."}
-          </p>
+          <>
+            <InquirySuccessTracker kind="contact" />
+            <p className="text-sm font-medium text-primary">
+              {state.mode === "persisted"
+                ? "Mensaje recibido. Te contactamos pronto desde Casa Testa."
+                : "Gracias — el mensaje se registró en modo demo (Supabase no configurado)."}
+            </p>
+          </>
         ) : null}
 
         <Button

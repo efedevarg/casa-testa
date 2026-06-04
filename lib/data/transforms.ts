@@ -53,7 +53,7 @@ export function transformProduct(row: ProductWithRelations): Product | null {
 
   return {
     id: row.id,
-    sku: row.sku,
+    sku: row.sku ?? undefined,
     slug: row.slug,
     name: row.name,
     shortDescription: row.short_description,

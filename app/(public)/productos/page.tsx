@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 
 import { ProductCatalog } from "@/components/products/product-catalog";
-import { fetchProducts } from "@/lib/data/fetchers";
+import { fetchCategories, fetchProducts } from "@/lib/data/fetchers";
+import { resolveCategoryMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
+const defaultMetadata: Metadata = {
   title: "Productos",
   description:
     "Ollas, sartenes, vajilla, cocina, decoración y pizzellas con curaduría italiana. Casa Testa, Caseros.",
@@ -13,7 +14,21 @@ export const metadata: Metadata = {
     description:
       "Catálogo con filtros claros y fotografía del salón — consultá disponibilidad por WhatsApp.",
   },
+  alternates: { canonical: "/productos" },
 };
+
+type PageProps = {
+  searchParams: Promise<{ categoria?: string }>;
+};
+
+export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
+  const { categoria } = await searchParams;
+  if (!categoria) return defaultMetadata;
+
+  const categories = await fetchCategories();
+  const dynamic = resolveCategoryMetadata(categoria, categories);
+  return dynamic ?? defaultMetadata;
+}
 
 function CatalogFallback() {
   return (

@@ -67,10 +67,6 @@ function parseProductForm(formData: FormData): ProductUpsertInput | { error: str
     return { error: "La descripción corta es obligatoria." };
   }
 
-  if (!sku) {
-    return { error: "El SKU es obligatorio." };
-  }
-
   if (!category_id) {
     return { error: "Seleccioná una categoría." };
   }
@@ -102,7 +98,7 @@ function parseProductForm(formData: FormData): ProductUpsertInput | { error: str
     short_description,
     price: Math.round(priceRaw),
     compare_at_price,
-    sku,
+    sku: sku || null,
     stock: stockRaw,
     featured,
     category_id,

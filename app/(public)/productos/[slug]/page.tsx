@@ -3,12 +3,19 @@ import { notFound } from "next/navigation";
 
 import type { Metadata } from "next";
 
-import { Button } from "@/components/ui/button";
+import { ProductViewTracker } from "@/components/analytics/product-view-tracker";
+import { ProductStickyCta } from "@/components/commercial/product-sticky-cta";
+import { WhatsAppCta } from "@/components/commercial/whatsapp-cta";
 import { OptimizedImage } from "@/components/media/optimized-image";
-import { SITE, WHATSAPP_CHAT_URL } from "@/lib/constants";
+import { BreadcrumbJsonLd, ProductJsonLd } from "@/components/seo/json-ld";
+import { Button } from "@/components/ui/button";
+import { WHATSAPP_CHAT_URL } from "@/lib/constants";
 import { formatArs } from "@/lib/format";
 import { getCategoryLabel } from "@/lib/data/labels";
 import { fetchProductBySlug, fetchProductSlugs } from "@/lib/data/fetchers";
+import { buildProductMetadata } from "@/lib/seo/metadata";
+import { absoluteUrl } from "@/lib/seo/urls";
+import { buildProductWhatsAppUrl } from "@/lib/whatsapp/messages";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -19,24 +26,11 @@ export async function generateStaticParams() {
   return slugs.map((slug) => ({ slug }));
 }
 
-function absoluteUrl(path: string) {
-  const base = SITE.url.replace(/\/$/, "");
-  return `${base}${path.startsWith("/") ? path : `/${path}`}`;
-}
-
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const product = await fetchProductBySlug(slug);
   if (!product) return {};
-  return {
-    title: product.name,
-    description: product.shortDescription,
-    openGraph: {
-      title: `${product.name} | Casa Testa`,
-      description: product.shortDescription,
-      images: [{ url: absoluteUrl(product.imageSrc), alt: product.imageAlt }],
-    },
-  };
+  return buildProductMetadata(product);
 }
 
 export default async function ProductoDetallePage({ params }: PageProps) {
@@ -46,120 +40,132 @@ export default async function ProductoDetallePage({ params }: PageProps) {
 
   const productUrl = absoluteUrl(`/productos/${product.slug}`);
   const categoryLabel = getCategoryLabel(product.category);
-  const waText = encodeURIComponent(
-    [
-      "Hola Casa Testa, me interesa este producto:",
-      `Producto: ${product.name}`,
-      `SKU: ${product.sku}`,
-      `Categoría: ${categoryLabel}`,
-      `Precio: ${formatArs(product.price)}`,
-      `URL: ${productUrl}`,
-      "",
-      "¿Me comparten disponibilidad?",
-    ].join("\n")
+  const whatsappHref = buildProductWhatsAppUrl(
+    { product, productUrl },
+    WHATSAPP_CHAT_URL
   );
 
   return (
-    <article className="pb-20 pt-10 sm:pt-14">
-      <div className="section-inline grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-start lg:gap-14">
-        <div className="space-y-4">
-          <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-border/70 bg-muted shadow-xl">
-            <OptimizedImage
-              src={product.imageSrc}
-              alt={product.imageAlt}
-              fill
-              priority
-              placeholder="empty"
-              sizes="(max-width: 1024px) 100vw, 50vw"
-            />
-          </div>
-          <p className="text-xs leading-relaxed text-muted-foreground">
-            Fotografía de referencia tomada en el salón. En tienda podés ver la
-            pieza, comparar acabados y confirmar medidas antes de llevarla.
-          </p>
-        </div>
+    <>
+      <ProductJsonLd product={product} />
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Inicio", path: "/" },
+          { name: "Productos", path: "/productos" },
+          { name: product.name, path: `/productos/${product.slug}` },
+        ]}
+      />
+      <ProductViewTracker slug={product.slug} name={product.name} />
 
-        <div className="space-y-8">
+      <article className="pb-28 pt-10 sm:pb-20 sm:pt-14 lg:pb-20">
+        <div className="section-inline grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-start lg:gap-14">
           <div className="space-y-4">
-            <div className="flex flex-wrap items-center gap-2">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
-                {getCategoryLabel(product.category)}
-              </p>
-              <span className="rounded-full border border-border/70 bg-muted/50 px-2.5 py-0.5 text-[0.65rem] font-medium uppercase tracking-wide text-muted-foreground">
-                {product.sku}
-              </span>
-              {product.inStock ? (
-                <span className="rounded-full border border-primary/25 bg-primary/10 px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wide text-primary">
-                  Disponible en salón
-                </span>
-              ) : (
-                <span className="rounded-full border border-border/80 bg-card px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wide text-muted-foreground">
-                  Sin stock
-                </span>
-              )}
+            <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-border/70 bg-muted shadow-xl">
+              <OptimizedImage
+                src={product.imageSrc}
+                alt={product.imageAlt}
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 55vw"
+              />
             </div>
-            <h1 className="font-heading text-4xl font-semibold tracking-tight text-balance text-foreground sm:text-5xl">
-              {product.name}
-            </h1>
-            <p className="text-lg leading-relaxed text-muted-foreground">
-              {product.shortDescription}
+            <p className="text-xs leading-relaxed text-muted-foreground">
+              Fotografía de referencia tomada en el salón. En tienda podés ver la pieza,
+              comparar acabados y confirmar medidas antes de llevarla.
             </p>
-            <div className="flex flex-wrap items-baseline gap-3">
-              <p className="text-3xl font-semibold text-foreground">{formatArs(product.price)}</p>
-              {product.compareAtPrice ? (
-                <p className="text-lg text-muted-foreground line-through">
-                  {formatArs(product.compareAtPrice)}
+          </div>
+
+          <div className="space-y-8">
+            <div className="space-y-4">
+              <div className="flex flex-wrap items-center gap-2">
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
+                  {categoryLabel}
                 </p>
+                {product.sku ? (
+                  <span className="rounded-full border border-border/70 bg-muted/50 px-2.5 py-0.5 font-mono text-[0.65rem] font-medium uppercase tracking-wide text-muted-foreground">
+                    {product.sku}
+                  </span>
+                ) : null}
+                {product.inStock ? (
+                  <span className="rounded-full border border-primary/25 bg-primary/10 px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wide text-primary">
+                    Disponible en salón
+                  </span>
+                ) : (
+                  <span className="rounded-full border border-border/80 bg-card px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wide text-muted-foreground">
+                    Sin stock
+                  </span>
+                )}
+              </div>
+              <h1 className="font-heading text-4xl font-semibold tracking-tight text-balance text-foreground sm:text-5xl">
+                {product.name}
+              </h1>
+              <p className="text-lg leading-relaxed text-muted-foreground">
+                {product.shortDescription}
+              </p>
+              <div className="flex flex-wrap items-baseline gap-3">
+                <p className="text-3xl font-semibold text-foreground">{formatArs(product.price)}</p>
+                {product.compareAtPrice ? (
+                  <p className="text-lg text-muted-foreground line-through">
+                    {formatArs(product.compareAtPrice)}
+                  </p>
+                ) : null}
+              </div>
+            </div>
+
+            <div className="space-y-3 rounded-3xl border border-border/70 bg-card/80 p-6 backdrop-blur-sm">
+              <h2 className="font-heading text-xl font-semibold tracking-tight text-foreground">
+                Historia de la pieza
+              </h2>
+              <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">
+                {product.description}
+              </p>
+              {product.highlights?.length ? (
+                <ul className="grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
+                  {product.highlights.map((item) => (
+                    <li key={item} className="flex gap-2">
+                      <span className="text-primary">·</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
               ) : null}
             </div>
-          </div>
 
-          <div className="space-y-3 rounded-3xl border border-border/70 bg-card/80 p-6 backdrop-blur-sm">
-            <h2 className="font-heading text-xl font-semibold tracking-tight text-foreground">
-              Historia de la pieza
-            </h2>
-            <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">
-              {product.description}
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <WhatsAppCta
+                href={whatsappHref}
+                trackingContext="product_detail"
+                trackingSlug={product.slug}
+              />
+              <Button
+                nativeButton={false}
+                render={<Link href="/productos" />}
+                variant="outline"
+                size="lg"
+                className="rounded-full"
+              >
+                Volver al catálogo
+              </Button>
+            </div>
+
+            <p className="text-xs leading-relaxed text-muted-foreground">
+              También podés visitarnos en Av. San Martín 1465, Caseros, o escribirnos desde{" "}
+              <Link href="/contacto" className="font-medium text-primary hover:underline">
+                contacto
+              </Link>
+              .
             </p>
-            {product.highlights?.length ? (
-              <ul className="grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
-                {product.highlights.map((item) => (
-                  <li key={item} className="flex gap-2">
-                    <span className="text-primary">·</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            ) : null}
-          </div>
-
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <Button
-              nativeButton={false}
-              render={
-                <a
-                  href={`${WHATSAPP_CHAT_URL}?text=${waText}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                />
-              }
-              size="lg"
-              className="rounded-full"
-            >
-              Consultar por WhatsApp
-            </Button>
-            <Button
-              nativeButton={false}
-              render={<Link href="/productos" />}
-              variant="outline"
-              size="lg"
-              className="rounded-full"
-            >
-              Volver al catálogo
-            </Button>
           </div>
         </div>
-      </div>
-    </article>
+      </article>
+
+      <ProductStickyCta
+        whatsappHref={whatsappHref}
+        productName={product.name}
+        productSlug={product.slug}
+        price={product.price}
+        inStock={product.inStock}
+      />
+    </>
   );
 }

@@ -13,6 +13,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { TrackedWhatsAppLink } from "@/components/analytics/tracked-whatsapp-link";
 import { MAIN_NAV, SITE, WHATSAPP_CHAT_URL } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
@@ -21,10 +22,11 @@ function WhatsAppButton({ className }: { className?: string }) {
     <Button
       nativeButton={false}
       render={
-        <a
+        <TrackedWhatsAppLink
           href={WHATSAPP_CHAT_URL}
           target="_blank"
           rel="noopener noreferrer"
+          trackingContext="navbar"
         />
       }
       size="sm"

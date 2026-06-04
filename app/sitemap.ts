@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { SITE } from "@/lib/constants/site";
-import { fetchProductSlugs } from "@/lib/data/fetchers";
+import { fetchCategories, fetchProductSlugs } from "@/lib/data/fetchers";
 
 const routes = [
   "",
@@ -14,7 +14,10 @@ const routes = [
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = SITE.url.replace(/\/$/, "");
-  const productSlugs = await fetchProductSlugs();
+  const [productSlugs, categories] = await Promise.all([
+    fetchProductSlugs(),
+    fetchCategories(),
+  ]);
 
   const staticEntries: MetadataRoute.Sitemap = routes.map((path) => ({
     url: `${base}${path}`,
@@ -30,5 +33,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  return [...staticEntries, ...productEntries];
+  const categoryEntries: MetadataRoute.Sitemap = categories
+    .filter((c) => c.slug !== "pizzellas")
+    .map((category) => ({
+      url: `${base}/productos?categoria=${category.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.55,
+    }));
+
+  return [...staticEntries, ...categoryEntries, ...productEntries];
 }

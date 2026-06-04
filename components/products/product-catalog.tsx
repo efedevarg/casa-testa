@@ -87,9 +87,15 @@ export function ProductCatalog({ products }: ProductCatalogProps) {
       </FadeIn>
 
       {filtered.length === 0 ? (
-        <p className="text-sm text-muted-foreground">
-          No hay productos en esta categoría por ahora.
-        </p>
+        <div className="rounded-3xl border border-dashed border-border/80 bg-muted/30 px-6 py-12 text-center">
+          <p className="font-heading text-xl font-semibold text-foreground">
+            Sin piezas en esta categoría
+          </p>
+          <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">
+            Probá otro filtro o escribinos por WhatsApp — te ayudamos a encontrar algo
+            similar en salón.
+          </p>
+        </div>
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
           {filtered.map((product, index) => (

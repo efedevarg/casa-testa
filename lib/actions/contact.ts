@@ -2,6 +2,7 @@
 
 import { isSupabaseConfigured } from "@/lib/env";
 import { insertContactInquiry } from "@/lib/queries/inquiries";
+import { normalizeOptionalPhone, isOptionalPhoneValid } from "@/lib/validation/phone";
 
 import type { ActionResult } from "./types";
 
@@ -17,6 +18,7 @@ export async function submitContactInquiry(
 ): Promise<ContactFormState> {
   const name = String(formData.get("name") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim();
+  const phoneRaw = String(formData.get("phone") ?? "").trim();
   const topic = String(formData.get("topic") ?? "productos").trim();
   const message = String(formData.get("message") ?? "").trim();
 
@@ -29,13 +31,17 @@ export async function submitContactInquiry(
   if (!message || message.length < 10) {
     return { ok: false, error: "El mensaje debe tener al menos 10 caracteres." };
   }
+  if (!isOptionalPhoneValid(phoneRaw)) {
+    return { ok: false, error: "Si indicás teléfono, usá al menos 8 dígitos." };
+  }
+  const phone = normalizeOptionalPhone(phoneRaw);
 
   if (!isSupabaseConfigured()) {
     return { ok: true, mode: "demo" };
   }
 
   try {
-    await insertContactInquiry({ name, email, topic, message });
+    await insertContactInquiry({ name, email, phone, topic, message });
     return { ok: true, mode: "persisted" };
   } catch (error) {
     console.error("[submitContactInquiry]", error);

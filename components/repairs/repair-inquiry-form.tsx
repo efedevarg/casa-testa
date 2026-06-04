@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 
+import { InquirySuccessTracker } from "@/components/analytics/inquiry-success-tracker";
 import { submitRepairInquiry } from "@/lib/actions/repair";
 import { FadeIn } from "@/components/marketing/fade-in";
 import { Button } from "@/components/ui/button";
@@ -11,10 +12,18 @@ const fields = [
   { id: "name", label: "Nombre y apellido", type: "text", placeholder: "Ej. Laura Bianchi" },
   { id: "email", label: "Email", type: "email", placeholder: "hola@tumail.com" },
   {
+    id: "phone",
+    label: "Teléfono (opcional)",
+    type: "tel",
+    placeholder: "+54 11 …",
+    required: false,
+  },
+  {
     id: "piece",
     label: "¿Qué pieza querés restaurar?",
     type: "text",
     placeholder: "Olla esmaltada, sartén de hierro, molde…",
+    required: true,
   },
 ] as const;
 
@@ -45,9 +54,10 @@ export function RepairInquiryForm() {
             >
               <span className="font-medium text-foreground">{field.label}</span>
               <input
-                required
+                required={"required" in field ? field.required !== false : true}
                 name={field.id}
                 type={field.type}
+                autoComplete={field.id === "phone" ? "tel" : undefined}
                 disabled={pending}
                 placeholder={field.placeholder}
                 className="w-full rounded-xl border border-input bg-background px-3 py-2.5 text-sm text-foreground outline-none ring-0 transition-shadow focus-visible:border-ring focus-visible:ring-4 focus-visible:ring-ring/40 disabled:opacity-60"
@@ -73,11 +83,14 @@ export function RepairInquiryForm() {
         ) : null}
 
         {state?.ok ? (
-          <p className="text-sm font-medium text-primary">
-            {state.mode === "persisted"
-              ? "Consulta registrada. Te escribimos a la brevedad."
-              : "Gracias — modo demo (Supabase no configurado). Si es urgente, WhatsApp."}
-          </p>
+          <>
+            <InquirySuccessTracker kind="repair" />
+            <p className="text-sm font-medium text-primary">
+              {state.mode === "persisted"
+                ? "Consulta registrada. Te escribimos a la brevedad."
+                : "Gracias — modo demo (Supabase no configurado). Si es urgente, WhatsApp."}
+            </p>
+          </>
         ) : null}
 
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

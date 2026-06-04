@@ -2,6 +2,7 @@
 
 import { isSupabaseConfigured } from "@/lib/env";
 import { insertRepairInquiry } from "@/lib/queries/inquiries";
+import { normalizeOptionalPhone, isOptionalPhoneValid } from "@/lib/validation/phone";
 
 import type { ActionResult } from "./types";
 
@@ -17,6 +18,7 @@ export async function submitRepairInquiry(
 ): Promise<RepairFormState> {
   const name = String(formData.get("name") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim();
+  const phoneRaw = String(formData.get("phone") ?? "").trim();
   const piece = String(formData.get("piece") ?? "").trim();
   const message = String(formData.get("message") ?? "").trim();
 
@@ -32,6 +34,10 @@ export async function submitRepairInquiry(
   if (!message || message.length < 10) {
     return { ok: false, error: "Describí el problema con un poco más de detalle." };
   }
+  if (!isOptionalPhoneValid(phoneRaw)) {
+    return { ok: false, error: "Si indicás teléfono, usá al menos 8 dígitos." };
+  }
+  const phone = normalizeOptionalPhone(phoneRaw);
 
   if (!isSupabaseConfigured()) {
     return { ok: true, mode: "demo" };
@@ -41,6 +47,7 @@ export async function submitRepairInquiry(
     await insertRepairInquiry({
       name,
       email,
+      phone,
       piece_description: piece,
       message,
     });

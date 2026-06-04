@@ -4,6 +4,7 @@ import { runSupabaseMutation } from "@/lib/supabase/helpers";
 export type ContactInquiryInsert = {
   name: string;
   email: string;
+  phone?: string | null;
   topic: string;
   message: string;
 };
@@ -11,6 +12,7 @@ export type ContactInquiryInsert = {
 export type RepairInquiryInsert = {
   name: string;
   email: string;
+  phone?: string | null;
   piece_description: string;
   message: string;
 };

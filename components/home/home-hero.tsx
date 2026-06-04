@@ -71,7 +71,6 @@ export function HomeHero({
           alt={imageAlt}
           fill
           priority
-          placeholder="empty"
           objectPosition="50% 42%"
           sizes="100vw"
         />

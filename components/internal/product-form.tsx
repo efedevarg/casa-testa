@@ -77,12 +77,14 @@ export function ProductForm({ categories, product, showSavedBanner }: ProductFor
         </label>
 
         <label className="space-y-2 text-sm">
-          <span className="font-medium text-foreground">SKU</span>
+          <span className="font-medium text-foreground">
+            SKU <span className="font-normal text-muted-foreground">(opcional)</span>
+          </span>
           <input
             name="sku"
-            required
-            defaultValue={product?.sku}
+            defaultValue={product?.sku ?? ""}
             disabled={pending}
+            placeholder="Ej. CT-OLL-001"
             className={`${inputClass} font-mono`}
           />
         </label>

@@ -6,7 +6,7 @@ export type ProductCategoryId = string;
 
 export type Product = {
   id: string;
-  sku: string;
+  sku?: string;
   slug: string;
   name: string;
   shortDescription: string;

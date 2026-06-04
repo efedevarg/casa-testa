@@ -54,7 +54,8 @@ export default async function EditProductPage({ params, searchParams }: PageProp
             {product.name}
           </h2>
           <p className="font-mono text-xs text-muted-foreground">
-            {product.sku} · {product.slug}
+            {product.sku ? `${product.sku} · ` : ""}
+            {product.slug}
           </p>
         </div>
         <DeleteProductButton

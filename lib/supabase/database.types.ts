@@ -51,7 +51,7 @@ export type Database = {
           short_description: string;
           price: number;
           compare_at_price: number | null;
-          sku: string;
+          sku: string | null;
           stock: number;
           featured: boolean;
           category_id: string;
@@ -66,7 +66,7 @@ export type Database = {
           short_description: string;
           price: number;
           compare_at_price?: number | null;
-          sku: string;
+          sku?: string | null;
           stock?: number;
           featured?: boolean;
           category_id: string;
@@ -81,7 +81,7 @@ export type Database = {
           short_description?: string;
           price?: number;
           compare_at_price?: number | null;
-          sku?: string;
+          sku?: string | null;
           stock?: number;
           featured?: boolean;
           category_id?: string;

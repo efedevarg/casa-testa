@@ -21,7 +21,7 @@ export type ProductUpsertInput = {
   short_description: string;
   price: number;
   compare_at_price: number | null;
-  sku: string;
+  sku: string | null;
   stock: number;
   featured: boolean;
   category_id: string;

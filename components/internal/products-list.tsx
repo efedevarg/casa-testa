@@ -22,7 +22,7 @@ export function ProductsList({ products }: ProductsListProps) {
     return products.filter(
       (p) =>
         p.name.toLowerCase().includes(q) ||
-        p.sku.toLowerCase().includes(q) ||
+        (p.sku?.toLowerCase().includes(q) ?? false) ||
         p.slug.toLowerCase().includes(q) ||
         p.categories?.name.toLowerCase().includes(q)
     );
@@ -79,7 +79,9 @@ export function ProductsList({ products }: ProductsListProps) {
                       {product.slug}
                     </p>
                   </td>
-                  <td className="px-4 py-3 font-mono text-xs">{product.sku}</td>
+                  <td className="px-4 py-3 font-mono text-xs text-muted-foreground">
+                    {product.sku ?? "—"}
+                  </td>
                   <td className="px-4 py-3 text-muted-foreground">
                     {product.categories?.name ?? "—"}
                   </td>
